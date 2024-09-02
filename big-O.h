@@ -71,7 +71,7 @@ int algoA(const int a[], int sz)//Don't change the function headers
     return max_sum;
 }
 
-//What is the runtime complexity of this algorithm? O(????)
+//What is the runtime complexity of this algorithm? O(n^2)
 //Even if you cannot get this function to work, you may guess the complexity and provide your answer above..
 int algoB(const int a[], int sz)
 {
