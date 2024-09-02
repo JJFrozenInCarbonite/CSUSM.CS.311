@@ -42,7 +42,7 @@ int main()
   cout << "========== Testing with a file with " << n << " numbers ===========" << endl;
   
   ifstream fin;
-  fin.open("/cs/slott/cs311/big-O.in");
+  fin.open("big-O.in");
 
   //fill the array
   for(int i = 0; i < n; i++)
