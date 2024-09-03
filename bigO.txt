@@ -1,0 +1,36 @@
+What is your user id (e.g. smith001)? ==>What is your programmer number? ==>
+---- you are  --------
+16 JJ
+
+Is the information correct? Type y or n then hit Enter ==>
+*********************************************************************************************************************
+Uploading your big-O.h was successful.
+*********************************************************************************************************************
+
+*********************************************************************************************************************
+Your program successfully compiled
+*********************************************************************************************************************
+
+*********************************************************************************************************************
+Your outputs are correct with this test client. We will use a different test client when we grade your program.
+*********************************************************************************************************************
+
+---- You are  --------
+16 JJ
+================ The system ran a test client with your big-O.h ==============
+================ Here are the outputs using your big-O.h ==============
+================ Compare your outputs to the expected outputs found in /cs/slott/cs311/big-O.out ==============
+========== Testing your big-O.h using {5, -4, -3, 2, 4, 0, 3, -1}. Algo A, B and C should all return 9 ============= 
+============ Testing algo A  =============== 
+9
+============ Testing algo B  =============== 
+9
+============ Testing algo C  =============== 
+9
+========== Testing your big-O.h using {5, 10, -1, -3, 2, 8, 4, 0, 12, 3, -1, 9} Algo A, B and C should all return 48 ============= 
+============ Testing algo A  =============== 
+48
+============ Testing algo B  =============== 
+48
+============ Testing algo C  =============== 
+48
