@@ -53,9 +53,18 @@ public:
 
   // Exception class for size errors
   class size_error : public std::exception {
+  private:
+
+    // Error message
+    const char* message; 
   public:
+
+  // Constructor to set the error message
+    explicit size_error(const char* msg) : message(msg) {}
+
+    // Override the what function to return the error message
     const char* what() const noexcept override {
-      return "Matrices have incompatible dimensions for multiplication";
+      return message;
     }
   };
 };
@@ -92,10 +101,10 @@ Matrix<T>::Matrix(int row, int col) : R(row), C(col) //setting const R and C
 template<class T>
 ifstream& operator>>(ifstream& fin, Matrix<T>& mrx)
 {
-  // Read the elements of the matrix
+  // Loop over the rows of the matrix
   for(int i = 0; i < mrx.R; i++) {
     
-    // Read the elements of the matrix
+    // Iterate over columns of the matrix
     for(int j = 0; j < mrx.C; j++) {
 
       // Read the element and store it in the matrix
@@ -116,16 +125,16 @@ ifstream& operator>>(ifstream& fin, Matrix<T>& mrx)
 template<class T>
 ostream& operator<<(ostream& o, const Matrix<T>& mrx)
 {
-  // Output the matrix to the screen in the following format. Allocate 10 spaces for each value.
+  // Loop over the rows of the matrix
   for(int i = 0; i < mrx.R; i++) {
 
-    // Output the elements of the matrix
+    // Iterate over columns of the matrix
     for(int j = 0; j < mrx.C; j++) {
 
-      // Output the element and store it in the matrix with a width of 10
+      // Add an element with 10 space width to the stream
       o << std::setw(10) << mrx.m[i][j];
     }
-    // Add a new line
+    // Send a new line to the stream
     o << std::endl;
   }
   // Return the stream
@@ -146,10 +155,10 @@ Matrix<T> Matrix<T>::operator*(const Matrix<T>& other)
   // Create a result matrix with dimensions R x other.C
   Matrix<T> result(R, other.C);
 
-  // Perform matrix multiplication
+  // Loop over the rows of the result matrix
   for (int i = 0; i < R; ++i) {
 
-    // Perform matrix multiplication
+    // Iterate over columns of the result matrix
     for (int j = 0; j < other.C; ++j) {
 
       // Initialize the element to 0
