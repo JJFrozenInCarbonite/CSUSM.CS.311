@@ -50,7 +50,14 @@ public:
   Matrix();
   ~Matrix();
   Matrix operator*(const Matrix& other);// matrix multiplication
-  class size_error{};//exception class 
+
+  // Exception class for size errors
+  class size_error : public std::exception {
+  public:
+    const char* what() const noexcept override {
+      return "Matrices have incompatible dimensions for multiplication";
+    }
+  };
 };
 
 //default constructor
@@ -133,7 +140,7 @@ Matrix<T> Matrix<T>::operator*(const Matrix<T>& other)
   if (C != other.R) {
 
     // Throw an exception if the matrices are incompatible
-    throw std::invalid_argument("Matrices have incompatible dimensions for multiplication");
+    throw size_error("Matrices have incompatible dimensions for multiplication");
   }
 
   // Create a result matrix with dimensions R x other.C
