@@ -11,8 +11,8 @@ https://matrix.reshish.com/multCalculation.php
 
 Your name: JJ Hoffmann
 Your programmer number: 16
-Hours spent?: 
-Any difficulties?:
+Hours spent?: 1
+Any difficulties?: Empress ran out of storage
 ***********************************/
 #include <iostream>
 #include <cstdlib>
