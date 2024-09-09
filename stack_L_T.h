@@ -3,10 +3,10 @@ Template created by Kazumi Slott
 CS311
 Stack implemented with a LL
 
-Your name here:
-Your programmer number here:
-Hours spent:
-Any problems you had? Explain here:
+Your name here: JJ Hoffmann
+Your programmer number here: 16
+Hours spent: .75
+Any problems you had? Explain here: 
 ###### Don't forget to specify the complexity above each function. ######
 ******************************************************************************************************************/
 #ifndef STACK_L_T_H
@@ -23,17 +23,23 @@ ostream& operator<<(ostream& o, const Stack<T>& s);
 
 
 template < class T >
-class Node
-{
+class Node{
   friend class Stack<T>; //Stack class accesses the private members of Node
   friend ostream& operator<< <T>(ostream& o, const Stack<T>& s); //operator<< accesses the private members of Node
 
  private:
-  //???? elem;
-  //???? next;  //check how right and left pointers are declared in BST class --> /cs/slott/cs211/BST_T.h
+  T elem; // elem is the value of the node and is of type T
+  Node* next; // next is a pointer to the next node in the linked list
+
  public:
-  Node(){/*????=NULL;*/} //default constructor
-  Node(const T& e){/*???????*/} //You should set next to NULL too.
+  Node(){
+    next = NULL; // default constructor sets next to NULL
+  } //default constructor
+
+  Node(const T& e){
+    elem = e; // constructor sets elem to e
+    next = NULL; // constructor sets next to NULL
+  } //You should set next to NULL too.
 };
 
 template <class T>
@@ -41,23 +47,47 @@ class Stack
 {
   friend ostream& operator<< <T>(ostream& o, const Stack& s); //operator<< accesses the private members of Stack
 
- private:
-  //???? top;
+  private:
+    Node<T>* top; // top is a pointer to the top of the stack
  
  //helper functions - private because they won't be called from client
-  void destroy();
-  void copy(const Stack& source);
+    // destroy() is a helper function that deletes all the nodes in the stack
+    void destroy();
+
+    // copy() is a helper function that makes a deep copy of the source stack
+    void copy(const Stack& source);
 
  public:
-  Stack() {/* ?????? */} //Implement a small function inside the class definition 
-  Stack(const Stack& other);
-  ~Stack();
-  Stack& operator=(const Stack& rhs); //rhs = right hand side of the operator   LHS_obj = RHS_obj
-  bool empty() const{/*return ????????? */} //implement a small function inside the class definition
-  void push (const T& val);
-  void pop();
-  T& getTop(); //Return type is T& so client can change the top value
-  const T& getTop() const; //A const object needs to call a const member function
+
+    // default constructor
+    Stack() {
+      top = NULL; // default constructor sets top to NULL
+    }
+    // copy constructor
+    Stack(const Stack& other);
+
+    // destructor
+    ~Stack();
+
+    // operator=() is the assignment operator. It makes a deep copy of the right hand side object and assigns it to the left hand side object.
+    Stack& operator=(const Stack& rhs); //rhs = right hand side of the operator   LHS_obj = RHS_obj
+    
+    // empty() returns true if the stack is empty, false otherwise
+    bool empty() const{
+      return top == NULL; // returns true if top is NULL, false otherwise
+    } 
+
+    // push() adds a new element to the top of the stack
+    void push (const T& val);
+
+    // pop() removes the top element from the stack
+    void pop();
+
+    // getTop() returns the top element of the stack
+    T& getTop(); //Return type is T& so client can change the top value
+
+    // getTop() returns the top element of the stack
+    const T& getTop() const; //A const object needs to call a const member function
   //??? operator==(????);
   
   //Make an empty exception class here. Underflow or/and Overflow? - You need to figure out where to throw an exception - I am throwing in 3 functions.
