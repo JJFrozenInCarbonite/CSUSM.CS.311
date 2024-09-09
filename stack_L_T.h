@@ -179,6 +179,8 @@ ostream& operator<<(ostream& o, const Stack<T>& s)
     }
 
   o << "--- Bottom ---" << endl;
+
+  return o;
  
 }
 
