@@ -96,48 +96,65 @@ class Stack
     class Underflow{};
 };
 
-/*
-//Complexity of this operation: O(?????)
+//-----------------------------------------------------------------------------------------------
+
+//Complexity of this operation: O(1)
 template <class T>
+
+// push() adds a new element to the top of the stack
 void Stack<T>::push(const T& val)
 {
-   //FYI, I have 3 lines of code here. You may have less or more.
-   //To make a new Node when the Node class is a template class, check insertNode() in /cs/slott/cs211/BST_T.h 
+  Node<T>* newNode = new Node<T>(val); //create a new node
+  newNode->next = top; //set the new node's next to the current top
+  top = newNode; //set the top to the new node
 }
-*/
 
-/*
-//Complexity of this operation: O(?????)
+//-----------------------------------------------------------------------------------------------
+
+//Complexity of this operation: O(1)
 template <class T>
+
+// pop() removes the top element from the stack
 void Stack<T>::pop()
 {
-  //throw an exception if the stack is empty. (You shouldn't call pop if the stack is empty.)
+  if(empty()) //check if the stack is empty
+    throw Underflow(); //throw an exception if the stack is empty
 
+  Node<T>* temp = top; //create a temporary node to hold the top
+  top = top->next; //set the top to the next node
+  delete temp; //delete the temporary node
 }
-*/
 
-/*
-//Complexity of this operation: O(?????)
+//-----------------------------------------------------------------------------------------------
+
+//Complexity of this operation: O(1)
 template <class T>
+
+// getTop() returns the top element of the stack (non-const version)
 T& Stack<T>::getTop()
 {
-  //thrown an exception if the stack is empty. You shouldn't call getTop if empty.
-  return ?????? //return the top element. Since the return type is T&, the client can change the top element.
-}
-*/
+  if(empty()) //check if the stack is empty
+    throw Underflow();
 
-/*
-//Complexity of this operation: O(?????)
+  return top->elem; //return the top element. Since the return type is T&, the client can change the top element.
+}
+
+//-----------------------------------------------------------------------------------------------
+
+//Complexity of this operation: O(1)
 template <class T>
+
+// getTop() returns the top element of the stack (const version)
 const T& Stack<T>::getTop() const
 {
-  //thrown an exception if the stack is empty. You shouldn't call getTop if empty.
-  return ?????? // same as the getTop() above. We need to provide this so a const object can call getTop(). Recall a const object can only call const member functions.
+  if(empty()) //check if the stack is empty
+    throw Underflow();
+
+  return top->elem; //return the top element. Since the return type is const T&, the client cannot change the top element.
 }
-*/
 
+//-----------------------------------------------------------------------------------------------
 
-/*
 //This function will show all the elements in the stack in the following format.
 //cout << stackObj; <== This cout is calling the following function. same as operator<<(cout, stackObj); 
 //Recall operator<< cannot be a member function because the LHS of the operator (<<) is not a stack object (it's cout, an ostream object). 
@@ -146,94 +163,123 @@ const T& Stack<T>::getTop() const
 //     1
 //     --- Bottom ---
 
-//Complexity of this operation: O(?????)
+//Complexity of this operation: O(n)
 template <class T>
 ostream& operator<<(ostream& o, const Stack<T>& s)
 {
   //print from top to bottom.
 
   o << "--- Top ---" << endl;
-
+  
+  Node<T>* temp = s.top; //create a temporary node to hold the top
+  while(temp != NULL) //loop through the stack
+    {
+      o << temp->elem << endl; //print the element
+      temp = temp->next; //move to the next node
+    }
 
   o << "--- Bottom ---" << endl;
  
 }
-*/
 
+//-----------------------------------------------------------------------------------------------
 
 template <class T>
+
+// destructor
 Stack<T>::~Stack()
 {
   destroy(); 
 }
 
 //helper function - called from destructor and operator=
-//Complexity of this operation: O(?????)
+//Complexity of this operation: O(n)
 template<class T>
+
+// destroy() is a helper function that deletes all the nodes in the stack
 void Stack<T>::destroy() //This function will be called by destructor and operator=
 {
-  //destroy all nodes
-  //?????????????? 
+  while (!empty()) //loop through the stack
+    {
+      pop(); //pop the top element
+    }
 }
 
-/*
-//Complexity of this operation: O(?????)
+//-----------------------------------------------------------------------------------------------
+
+//Complexity of this operation: O(n)
 template <class T>
+
+// Create a deep copy of a stack
 Stack<T>& Stack<T>::operator=(const Stack& rhs) //rhs = right hand side of the operator
 {
-  //good reading from cal tech
-  //http://courses.cms.caltech.edu/cs11/material/cpp/donnie/cpp-ops.html
-  //Notice that the returned reference is not declared const (Stack<T>&). 
-  //This can be a bit confusing, because it allows you to write crazy stuff like this: (s1 = s2) = s3;
-
-
-  //deep copy
-  if(???????) //Check the addresses of the left and right objects. If they are the same, you are trying to assign the same object   s = s;
-              //You copy only if the left object is not the same as the right object.
-    {
-      //destroy any memory space "this" is using. "this" may have elements already. call destroy
-      //call copy
-    }
-  return ???????; //return the "this" object (not the address of the "this" object). Notice the return type is not void. 
-                  //By returning the this object, we can use multiple assignment operators. 
-                  //s1 = s2 = s3; same as s1 = s2.operator=(s3);  Now you can see why operator=() needs to return the this object (s2). 
+  // If this stack is not the same as rhs, then copy the elements from rhs to this stack, else return this stack
+  if(this != &rhs) {
+    destroy(); // Destroy any existing elemenets in the stack before copying the new elements
+    copy(rhs); // Copy elements from rhs to this stack
+  }
+  return *this; //return the object 
 }
-*/
 
-/*
-//Complexity of this operation: O(?????)
+//-----------------------------------------------------------------------------------------------
+
+//Complexity of this operation: O(n)
 //helper fuction. called from operator= and copy constructor
 template <class T>
+
+// copy() is a helper function that makes a deep copy of the source stack
 void Stack<T>::copy(const Stack& source) //source is the stack object copied from. 
 {
-  //"this" object ends up having the same values from source
-  //Make sure this function won't crush when the source stack is empty. If the source stack is empty, "this" stack is also empty 
-  //The complexity of this function should be O(n). If you implement this function by calling push(), the complexity will probably be O(n^2).
-  //Make this function without calling push().
-}
-*/
+  Node<T>* temp = source.top; //create a temporary node to hold the top of the source stack
+  Node<T>* last = NULL; //create a temporary node to hold the last node of the new stack
 
-/*
-//Complexity of this operation: O(?????)
+  while(temp != NULL) //loop through the source stack
+    {
+      Node<T>* newNode = new Node<T>(temp->elem); //create a new node with the same element as the source stack
+      if(last == NULL) //check if the last node is NULL
+        top = newNode; //set the top to the new node
+      else
+        last->next = newNode; //set the last node's next to the new node
+      last = newNode; //set the last node to the new node
+      temp = temp->next; //move to the next node
+    }
+}
+
+//-----------------------------------------------------------------------------------------------
+
+
+//Complexity of this operation: O(1)
 //copy constructor
 template <class T>
 Stack<T>::Stack(const Stack& other)
 {
-  //This is a copy constructor. This new object will get the same values as the other object. 
-  //You still need to initialize the data member, top.
-  ???????
-
-  //Then you can call the copy function
+  top = NULL; //initialize top to NULL
+  copy(other); //copy the elements from the other stack
 }
-*/
 
-/*
-//Complexity of this operation: O(?????)
+//-----------------------------------------------------------------------------------------------
+
+//Complexity of this operation: O(1)
 template <class T>
-??? Stack<T>::operator==(??????)
+bool Stack<T>::operator==(const Stack& rhs) //rhs = right hand side of the operator
 {
-  //This function will return true if the two linked lists have the same values. Otherwise, it returns false.
+  //This function will return true if the two stacks have the same values. Otherwise, it returns false.
+  Node<T>* temp1 = top; //create a temporary node to hold the top of the first stack
+  Node<T>* temp2 = rhs.top; //create a temporary node to hold the top of the second stack
+
+  while(temp1 != NULL && temp2 != NULL) //loop through the stacks
+    {
+      if(temp1->elem != temp2->elem) //check if the elements are not equal
+        return false; //return false
+      temp1 = temp1->next; //move to the next node
+      temp2 = temp2->next; //move to the next node
+    }
+
+  if(temp1 == NULL && temp2 == NULL) //check if both stacks are empty
+    return true; //return true
+  else
+    return false; //return false
 }
-*/
+
 
 #endif // end the definition here
