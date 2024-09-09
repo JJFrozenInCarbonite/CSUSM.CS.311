@@ -88,10 +88,12 @@ class Stack
 
     // getTop() returns the top element of the stack
     const T& getTop() const; //A const object needs to call a const member function
-  //??? operator==(????);
+
+    // operator==() returns true if the two stacks have the same values, false otherwise
+    bool operator==(const Stack& rhs); //rhs = right hand side of the operator
   
-  //Make an empty exception class here. Underflow or/and Overflow? - You need to figure out where to throw an exception - I am throwing in 3 functions.
-  //??????????
+    // Exception class for underflow
+    class Underflow{};
 };
 
 /*
