@@ -5,7 +5,7 @@ Stack implemented with a LL
 
 Your name here: JJ Hoffmann
 Your programmer number here: 16
-Hours spent: 1.5
+Hours spent: 1.5, I can't really say how long I spent on one section versus another since I did it all in a single shot
 Any problems you had? Explain here: 
 ###### Don't forget to specify the complexity above each function. ######
 ******************************************************************************************************************/
