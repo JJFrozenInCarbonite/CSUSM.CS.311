@@ -2,40 +2,43 @@
 Template prepared by Kazumi Slott
 CS311
 
-Description of this program: ???????????????????
+Description of this program: Housing price calculator using matrix transposition and multiplication
 
-Your name: 
-Your programmer number:
-Number of hours you spent:
-Any difficulties?:
+Your name: JJ Hoffmann
+Your programmer number: 16
+Number of hours you spent: 1.5
+Any difficulties?: I wrote a transposition operator in matrix.h so I could write both sets of source data left-to-right
+without having to transpose it manually, but then I realized that the source data probably would be in the other format 
+so I ended up not using it, but I left it in matrix.h.
 *******************************************/
-//What do you need to include? HINT: What are you using in main()?
-//include your matrix.h
+#include <iostream>
+using namespace std;
+
+#include "matrix.h"
 
 int main()
 {
-  /*
-  ?????
-  Your matrices need to be of the same data type.  When you do multiplication, the data types of the 2 matrices need to be the same.
+  Matrix<double> house_info(4, 4); // 4 rows x 4 columns (sq ft, bedrooms, age, and constant 1)
+  Matrix<double> house_func(4, 3); // 3 rows (house 1, house 2, house 3) x 4 columns (coefficients for sq ft, bedrooms, age, and constant 1) 
+  ifstream fin;
 
-  //Create 2 input files yourself. You need to name them house_info.in and house_func.in, otherwise my auto-grader will not run your program.
+  fin.open("house_info.in");
+  fin >> house_info;
+  fin.close();
 
-  //Check matrixClient.cpp to see an example
-  create fin
-  open the first file (which file should be the first? You need to figure it out.)
-  load the data into the first matrix
-  close fin
+  fin.open("house_func.in");
+  fin >> house_func;
+  fin.close();
 
-  open the second file
-  load the data into the second matrix
-  close fin
+  try
+  {
+    Matrix<double> result = house_info * house_func;
+    cout << result << endl;
+  }
+  catch(Matrix<double>::size_error)
+  {
+    cout << "SIZE ERROR" << endl;
+  }
 
-  ?????
-  use try and catch
-  In catch, show the following message.
-  cout << "SIZE ERROR" << endl;
-
-
-  */
   return 0;
 }

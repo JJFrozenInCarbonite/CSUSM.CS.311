@@ -50,6 +50,7 @@ public:
   Matrix();
   ~Matrix();
   Matrix operator*(const Matrix& other);// matrix multiplication
+  Matrix operator~(); // matrix transposition
 
   // Exception class for size errors
   class size_error : public std::exception {
@@ -170,6 +171,28 @@ Matrix<T> Matrix<T>::operator*(const Matrix<T>& other)
         // Perform matrix multiplication
         result.m[i][j] += m[i][k] * other.m[k][j];
       }
+    }
+  }
+
+  // Return the result matrix
+  return result;
+}
+
+// Matrix transposition
+template<class T>
+Matrix<T> Matrix<T>::operator~()
+{
+  // Create a result matrix with dimensions C x R
+  Matrix<T> result(C, R);
+
+  // Loop over the rows of the original matrix
+  for (int i = 0; i < R; ++i) {
+
+    // Loop over the columns of the original matrix
+    for (int j = 0; j < C; ++j) {
+
+      // Assign the element at (i, j) in the original matrix to (j, i) in the result matrix
+      result.m[j][i] = m[i][j];
     }
   }
 
