@@ -43,6 +43,8 @@ void mySwap(T& a, T& b)
 /**
  * Partitions the array around a pivot.
  * 
+ * This implementation moves the pivot to the end of the array then partitions the array.
+ * 
  * @param ar[] The array to be partitioned.
  * @param start The starting index of the partition to be sorted.
  * @param end The ending index of the partition to be sorted.
