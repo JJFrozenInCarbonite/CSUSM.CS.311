@@ -55,6 +55,7 @@ int main() {
 
         // Convert infix to postfix
         string postfix = infix_to_postfix(infix);
+        cout << postfix << endl;
         
         // Evaluate the postfix expression
         double result = evaluate_postfix(postfix);
