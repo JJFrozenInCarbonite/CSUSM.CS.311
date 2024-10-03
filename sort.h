@@ -2,9 +2,9 @@
 Template created by Kazumi Slott
 CS311
 
-Your name:
-Your programmer number:
-Hours spent:
+Your name: JJ Hoffmann
+Your programmer number: 16
+Hours spent: 1
 Any difficulties?:
 **************************************/
 
@@ -27,9 +27,17 @@ void print(const int ar[], int n)
 
 //https://www.youtube.com/watch?v=ROalU379l3U
 //Implement the insertion sort by watching the above youTube video. Your algorithm has to match their dance.
-void insertionSort(int ar[], int n)
+void insertionSort(int arr[], int n)
 {
-  //call swap
+  for (int i = 1; i < n; i++)
+  {
+    int j = i;
+    while (j > 0 && arr[j - 1] > arr[j])
+    {
+      swap(arr[j], arr[j - 1]);
+      j--;
+    }
+  }
 }
 
 
@@ -38,23 +46,25 @@ void insertionSort(int ar[], int n)
 //Make sure you change varibale names and comments to suit your new code.
 //<REQUIREMENT> don't change the structure.
 //You can find more information in my homework document
+
+//The following function sorts the array in ascending order by moving the smallest value to the beginning.
 void selectionSort(int array[], int N)
 {
-  int lrgIndx; //the index of the largest value
+  int smlIndx; //the index of the smallest value
 
-  //last is the last index in unsorted part
-  for(int last = N-1; last >= 1; last--)
+  //first is the first index in unsorted part
+  for(int first = 0; first < N - 1; first++)
     {
-      lrgIndx = 0; //assume the first item is the largest
-      //find the largest in unsorted part ([0..last])
-      for(int i = 1; i <= last; i++)
-	{
-	  if(array[i] > array[lrgIndx]) //The current item is larger
-	    lrgIndx = i;
-	}
+      smlIndx = first; //assume the first item is the smallest
+      //find the smallest in unsorted part ([first..N-1])
+      for(int i = first + 1; i < N; i++)
+      {
+        if(array[i] < array[smlIndx]) //The current item is smaller
+          smlIndx = i;
+      }
 
-      //swap the largest with the last item in the unsorted part
-      swap(array[lrgIndx],array[last]);
+      //swap the smallest with the first item in the unsorted part
+      swap(array[smlIndx], array[first]);
     }
 }
 
@@ -64,48 +74,117 @@ void selectionSort(int array[], int N)
 //You could also watch my CS211 lecture recording "Lecture 2/5(Fri) - bubble sort and enum" 
 void bubbleSort(int ar[], int s)
 {
-  /*
-  bool swapped = ?????; //true if there was swapping in the current iteration, false otherwise                                   
-  int last = ????; //last is the index of the left element of the last pair to be checked in the current iteration.
+  bool swapped = true; //true if there was swapping in the current iteration, false otherwise                                   
+  int last = s-2; //last is the index of the left element of the last pair to be checked in the current iteration.
 
-  while(????) //swapping required in the previous iteration or the first iteration starts                        
+  while(swapped) //swapping required in the previous iteration or the first iteration starts                        
+  {
+    swapped = false; //no swapping has happened yet when a new iteration starts.                                         
+
+    for(int i = 0; i <= last; i++) //check each adjacent pair of items in the unsorted part                     
     {
-      swapped = ????; //no swapping has happened yet when a new iteration starts.                                         
+      if(ar[i] > ar[i + 1]) //the pair is out of order                                                          
+      {
+        swap(ar[i], ar[i + 1]);
+        swapped = true; //swapping required - meaning we need to proceed to the next iteration.                            
+      }
+    }
+    last--; //the area to be checked shrinks down after each iteration                                         
+  }//end of while                                                                                               
+}
 
-      for(????; i <= last; ???????) //check each adjacent pair of items in the unsorted part                     
-        {
-	  if(?????????????) //the pair is out of order                                                          
-	    {
-	      swap(?????????????);
-	      ????????? //swapping required - meaning we need to proceed to the next iteration.                            
-	    }
+
+int partition(int arr[], int start, int end)
+{
+    int mid = (start + end) / 2;
+    swap(arr[mid], arr[end]);  // Swap middle element with the last
+
+    int pivot = arr[end];      // Pivot is now the last element
+    int red = start;           // Red starts at the beginning
+
+    for (int green = start; green < end; green++) {
+        if (arr[green] < pivot) {
+            swap(arr[red], arr[green]);
+            red++;             // Move red pointer to the right
         }
-      ??????? //the area to be checked shrinks down after each iteration                                         
-    }//end of while                                                                                               
-  */
+    }
+    swap(arr[red], arr[end]);  // Swap the pivot with the red pointer
+    return red;                // Return the index of the pivot
+}
+
+void quickSort(int arr[], int start, int end)
+{
+    if (start >= end) 
+        return;                // If the partition has 0 or 1 element, return
+    else {
+        int pivot = partition(arr, start, end);  // Partition and get pivot index
+        quickSort(arr, start, pivot - 1);        // Sort left partition
+        quickSort(arr, pivot + 1, end);          // Sort right partition
+    }  
 }
 
 
-int partition(int a[], int start, int end)
+void merge(int arr[], int first, int mid, int last)
 {
-  //copy and paste partition() from your quickSort.cpp
+
+  // Create a temp array to hold the merged elements
+  int size = last - first + 1;
+  int *temp = new int[size];
+
+  int left = first;     // Pointer for left half
+  int right = mid + 1;  // Pointer for right half
+  int index = 0;        // Pointer for temp array
+
+  // Merge the two halves into temp
+  while (left <= mid && right <= last)
+  {
+      if (arr[left] <= arr[right])  // Stable sorting implementation
+      {
+          temp[index++] = arr[left++];
+      }
+      else
+      {
+          temp[index++] = arr[right++];
+      }
+  }
+
+  // Copy remaining elements of the left half,if any
+  while (left <= mid)
+  {
+      temp[index++] = arr[left];
+      left++;
+  }
+
+  // Copy remaining elements of the right half, if any
+  while (right <= last)
+  {
+      temp[index++] = arr[right];
+      right++;
+  }
+
+  // Copy the sorted elements back into the original array
+  for (int i = 0; i < size; i++)
+  {
+      arr[first + i] = temp[i];
+  }
+
+  // Delete the temp array
+  delete[] temp;  
 }
 
-void quickSort(int ar[], int start, int end)
+void mergeSort(int arr[], int first, int last)
 {
-  //copy and paste quickSort() from your quickSort.cpp   
-}
-
-
-void merge(int ar[], int first, int last)
-{
-  //copy and paste merge() from your mergeSort.cpp   
-}
-
-void mergeSort(int ar[], int first, int last)
-
-{
-  //copy and paste mergeSort()from your mergeSort.cpp   
+    if (first < last)
+    {
+        int mid = (first + last) / 2;
+        
+        // Recursively sort the left and right halves
+        mergeSort(arr, first, mid);
+        mergeSort(arr, mid + 1, last);
+        
+        // Merge the two halves
+        merge(arr, first, mid, last);
+    }
 }
 
 
