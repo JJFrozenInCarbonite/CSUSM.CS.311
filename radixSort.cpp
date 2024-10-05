@@ -3,10 +3,15 @@ Template created by Kazumi Slott
 CS311
 Homework on radix sort
 
-Description of this program: ?????
-Your name: ?????
-Your programmer number: ?????
-Hours spent: ????
+Description of this program:
+  This program implements the Radix Sort algorithm to sort a list of fixed-length strings. The program 
+  reads strings from an input file, stores them in a linked list, and sorts them using the Radix Sort 
+  technique. The strings into buckets based on individual character positions, starting from the least 
+  significant character to the most significant character.
+
+Your name: JJ Hoffmann
+Your programmer number: 16
+Hours spent: ??1
 Any difficulties?: ?????
 ************************************/
 
@@ -89,10 +94,18 @@ void LL::addRear(Node* p)
   //Don't make a new node.
 
   //You need a special case when the list is empty
+  if (empty()) {
+    front = rear = p;
+  } else {
+    rear->next = p;
+    rear = p;
+  }
 
   //don't forget to increment num
+  num++;
 
   //You should have NULL in the next field of the rear node of this list.
+  rear->next = NULL;
 
   //Note: this function should have complexity O(1). There is no loop required. 
 }
@@ -101,29 +114,59 @@ void LL::addRear(Node* p)
 //appending another linked list (called "other" here) at the end of this linked list 
 void LL::append(const LL& other)
 {
-  //Do you need to think about a special case?
+  // Do you need to think about a special case?
+  if (other.empty()) {
+    return;
+  }
 
-  //Don't forget to update num of this list
+  if (empty()) {
+    front = other.front;
+    rear = other.rear;
+  } else {
+    rear->next = other.front;
+    rear = other.rear;
+  }
 
-  //Note: this function should have complexity O(1). There is no loop required. 
+  // Don't forget to update num of this list
+  num += other.num;
+
+  // Note: this function should have complexity O(1). There is no loop required. 
 }
 
 //removing the front node from the list and returning the pointer to it                                                          
 Node* LL::pop()
 {
-  //If the list is empty, throw an exception                                                                            
- 
+  // If the list is empty, throw an exception
+  if (empty()) {
+    throw Underflow();
+  }
+
   //remove the front node and return the pointer to it
+  // Store the current front node in a temporary pointer
+  Node* temp = front;
 
   //Make sure front points to the new front node. 
+  // Update the front pointer to point to the next node
+  front = front->next;
+
   //Make sure you update num.
-  //When the list becomes empty after the front node is popped, rear should become NULL.
+  // Decrement the num counter
+  num--;
+
+  // When the list becomes empty after the front node is popped, rear should become NULL
+  if (front == NULL) {
+    rear = NULL;
+  }
+
+  // Return the temporary pointer
+  return temp;
+                                                      
 }
 
 void radixSort(LL& all);
 void printLL(const LL& l);
 void checkBuckets(const LL buckets[], int n);
-void combineLists(/* ?????????? */);
+void combineLists(LL& all, LL buckets[]);
 void makeLL(LL& all);
 
 int main()
@@ -149,24 +192,37 @@ int main()
 void radixSort(LL& all)
 {
   //Each slot of the buckets array is a LL object.
-  //??? buckets[ALPHABET]; //bucket[0] is for 'a'. There are 26 buckets.   
+  LL buckets[ALPHABET]; // bucket[0] is for 'a'. There are 26 buckets.
 
   //checking each place
+  for (int pos = LEN - 1; pos >= 0; --pos) {
     //keep on popping the front node and add it to the end of the correct bucket depending on the letter at the current place
- 
+  while (!all.empty()) {
+    Node* node = all.pop();
+    char ch = node->getElem()[pos];
+    int bucketIndex = ch - 'a';
+    buckets[bucketIndex].addRear(node);
+  }
     //Once all the nodes of the all list are moved to the correct buckets, put them together by calling combineLists(). 
-
+  combineLists(all, buckets);
 
   //For debugging, checkBuckets() displays the contents of all the buckets
-  //               printLL() displays all the elements in the list
+  //printLL(all); //displays all the elements in the list
+  }
 }
 
 //Implement this function
 //combining the lists from the buckets into the all list
-void combineLists(/* all list, buckets */)
+void combineLists(LL& all, LL buckets[])
 {
   //populate the all list by combining the lists from the buckets by calling append()
-  //reset each list object in buckets by calling clear(). All the nodes were moved to the all list already.
+  for (int i = 0; i < ALPHABET; ++i) 
+  {
+    all.append(buckets[i]);
+
+    //reset each list object in buckets by calling clear(). All the nodes were moved to the all list already.
+    buckets[i].clear();
+  }
 }
 
 //Make a linked list of words from an input file  
