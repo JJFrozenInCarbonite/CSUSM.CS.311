@@ -33,9 +33,9 @@ void exchange(int &a, int &b)
 void max_heapify(int ar[], int n, int i)
 {
   
-  int l = 2 * i + 1; //the index of the left child of i
-  int r = 2 * 1 + 2; //the index of the right child of i
-  int largest = i; //the index of the largest value among the values at i, l and r
+  int l = 2 * i + 1; // the index of the left child of i
+  int r = 2 * i + 2; // the index of the right child of i
+  int largest = i;   // the index of the largest value among the values at i, l and r
   
   // Check if left child exists and is greater than root
   if (l < n && ar[l] > ar[largest])
