@@ -2,10 +2,10 @@
 Template written by Kazumi Slott
 CS311
 
-Your name: ????????
-Your programmer number: ????????
-Hours spent: ????
-Any difficulties?: ?????????
+Your name: JJ Hoffmann
+Your programmer number: 16
+Hours spent: 1
+Any difficulties?: No
 *******************************************/
 #include <iostream>
 using namespace std;
@@ -21,46 +21,50 @@ void print(int ar[], int n)
 }
 
 //called from max_heapify and heapSort
-void exchange(/*?????*/)
+void exchange(int &a, int &b)
 {
-  //I have 3 lines of code here.
+  int temp = a;
+  a = b;
+  b = temp;
 }
 
 //turns a heap rooted at i into a max-heap, assuming the left and right subtrees are already max-heaps.
 //n is the number of elements in the heap
 void max_heapify(int ar[], int n, int i)
 {
-  /*
-  int l = ?????; //the index of the left child of i
-  int r = ?????; //the index of the right child of i
-  int largest = ????; //the index of the largest value among the values at i, l and r
+  
+  int l = 2 * i + 1; //the index of the left child of i
+  int r = 2 * 1 + 2; //the index of the right child of i
+  int largest = i; //the index of the largest value among the values at i, l and r
+  
+  // Check if left child exists and is greater than root
+  if (l < n && ar[l] > ar[largest])
+    largest = l;
 
-  //look for the largest among 3 elements at i, l and r. largest gets the index of the largest value.
-  //Causion: Make sure l and r don't go over the heap's range. 
-  //         l and r calculated may not exist in the heap.
-  //         Check the validity of l or r before you use it (???? below).
-  //              e.g  if(???? && a[l] > a[largest])
+  // Check if right child exists and is greater than largest so far
+  if (r < n && ar[r] > ar[largest])
+    largest = r;
 
-  ???????? //I have 4 lines of code here. You can have more or less.
-
-  //The largest is either the right or left child. We need to exchange the parent with it.
-  if(largest ?????)
-    {
+  // If largest is not root
+  if(largest != i)
+  {
       //exchange the 2 values
-      //There might be a violation at the position that was exchanged. Call max_heapify to fix it.
-    }
-  */
+      exchange(ar[i], ar[largest]);
+    
+      // Recursively heapify the affected sub-tree
+      max_heapify(ar, n, largest);
+  }
 }
 
 //turns the entire array/tree into a max heap rooted at 0
 //n is the number of elements we have in the array
 void build_max_heap(int ar[], int n)
 {
-  //2 lines of code in this function
-  /*
-  for each non-leaf node
-     call max_heapify (turn the smallest subtrees into max-heaps and work your way up)
-  */
+  // Start from the last non-leaf node and go up to the root node
+  for (int i = n / 2 - 1; i >= 0; i--)
+  {
+    max_heapify(ar, n, i);
+  }
 }
 
 //a is an unordered list to start with
@@ -68,29 +72,42 @@ void build_max_heap(int ar[], int n)
 //n is the number of elements in the array
 void heapSort(int a[], int n)
 {
-  //I have 6 lines of code in this function. You can have more or less.
+  // Build max heap from an unordered list
+  build_max_heap(a, n);
 
-  //build max heap from an unordered list
-  //call build_max_heap
+  int size = n; // size of the unsorted portion of the array
 
-  int size = n; //size of the unsorted portion of the array
+  // Repeat until heap has only 1 element
+  while (size > 1)
+  {
+    // Swap max element with last element - max element is now the last element
+    exchange(a[0], a[size - 1]);
 
-  // while(??????) //repeat until heap has only 1 element
-    {  
-      //swap max element with last element - max element is now the last element
-     
-      //discard the last element from the heap
-     
-      //root may violate max-heap property, but children are max heaps. run max_heapify to fix it.
+    // Discard the last element from the heap
+    size--;
 
-    }
+    // Root may violate max-heap property, but children are max heaps. Run max_heapify to fix it.
+    max_heapify(a, size, 0);
+  }
 }
 
 //this function corrects a violiation at i by bubbling it up to the correct place                             
 //a is a heap                                                                                                
 void bubbleUp(int a[], int i)
 {
-  //Write this function after you made insert() and while you are making remove().
+  // Get the index of the parent
+  int parent = (i - 1) / 2;
+
+  // While the current node is not the root and the current node is greater than its parent
+  while (i > 0 && a[i] > a[parent])
+  {
+    // Swap the current node with its parent
+    exchange(a[i], a[parent]);
+
+    // Move up to the parent
+    i = parent;
+    parent = (i - 1) / 2;
+  }
 }
 
 //a is a max heap                                                                                            
@@ -99,10 +116,20 @@ void bubbleUp(int a[], int i)
 //el is the new element to be inserted                                                                       
 void insert(int a[], int cap, int& n, int el)
 {
-  //refer to lecture notes
-  //throw "The array is full" if the array is full.
-  //write this function without calling bubbleUp() first. When you work on remove(), you will notice you will
-  //have to have the same code there. Move the code into bubbleUp() and call it to avoid redundancy.
+  // Check if the heap is full
+  if (n >= cap)
+  {
+    throw "The array is full";
+  }
+
+  // Insert the new element at the end of the heap
+  a[n] = el;
+
+  // Increment the size of the heap
+  n++;
+
+  // Bubble up the new element to maintain the heap property
+  bubbleUp(a, n - 1);
 }
 
 //This function returns the index where key was found or throws an exception if key is not found.                                   
@@ -125,10 +152,28 @@ int find(const int a[], int n, int key)
 //i is the index of the element to be removed.                                             
 void remove(int a[], int& n, int i)
 {
-  //refer to lecture notes
-  //throw "The index to be removed is invalid" if i is an invalid index.
-  //Call bubbleUp or max_heapify (the lecture notes show 2 possibilities).
-  //FYI, I have a total of 10 lines of code in this function. You can have more or less.
+  // Check if the index is valid
+  if (i < 0 || i >= n)
+  {
+    throw "The index to be removed is invalid";
+  }
+
+  // Replace the element to be removed with the last element
+  a[i] = a[n - 1];
+
+  // Decrement the size of the heap
+  n--;
+
+  // If the replaced element is greater than its parent, bubble it up
+  if (i > 0 && a[i] > a[(i - 1) / 2])
+  {
+    bubbleUp(a, i);
+  }
+  else
+  {
+    // Otherwise, heapify down
+    max_heapify(a, n, i);
+  }
 }
 
 int main()
