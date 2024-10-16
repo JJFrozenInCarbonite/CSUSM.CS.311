@@ -37,25 +37,25 @@ key is the number being searched for.
 ****************************************************************************/
 int binarySearchDescend(const int a[], int s, int key)
 {
-  int l = ????; //left boudary starts at first index                                                                                 
-  int r = ????; //right boundary starts at last index          
+  int l = 0; //left boudary starts at first index                                                                                 
+  int r = s - 1; //right boundary starts at last index          
   int m; //middle point between left and right.                                                                                      
                          
   //When l and r cross over, search ends. --> key was not found.                                                                     
-  while( ?????  )
+  while(l <= r)
     {
       //calculate the middle point between l and r                                                                                   
-      ??????
+      m = l + (r - l) / 2;
 
-      if(?????????) //key was found  
-        return ??????;
-      else if(????????)
-        ?????????;
-      else //if(???????)
-        ?????????;
+      if (a[m] == key) //key was found  
+        return m; // return index where key was found
+      else if (a[m] > key)
+        l = m + 1; 
+      else 
+        r = m - 1;
     }
 
-  return ???????; //key wasn't found                                                                               
+  return -1; //key wasn't found                                                                               
 }
 
 //a is sorted in ascending order
@@ -64,11 +64,26 @@ int binarySearchDescend(const int a[], int s, int key)
 //This function returns index where key was found or -1 if not found.
 int binarySearch(const int a[], int key, int L, int R)
 {
-  int m = ??????; //middle of [L..R]
   //keep this cout. You need to verify your code by comparing your outputs to the expected outputs listed above.
   cout << "L, R = " << L << ", " << R << endl;
 
+  // Base case: if L is greater than R, key is not present
+  if (L > R) {
+      return -1;
+  }
+
+  int m = L + (R - L) / 2; //middle of [L..R]
+
   //complete this function by using recursion.
+  if (a[m] == key) {
+      return m;
+  } else if (a[m] > key) {
+      // If the middle element is greater than the key, search the left half
+      return binarySearch(a, key, L, m - 1);
+  } else {
+      // If the middle element is less than the key, search the right half
+      return binarySearch(a, key, m + 1, R);
+  }
 }
 
 //Don't change this main.
