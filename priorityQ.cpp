@@ -9,9 +9,10 @@ g++ -std=c++11 priorityQ.cpp //stoi requires to be compiled with c++11
 Program description: ?????
 Your name: JJ Hoffmann
 Your programmer number: 16
-Hours spent making this application: ?????
-Are you rejecting invalid inputs?: ????
-Any difficulties: ???????
+Hours spent making this application: 2
+Are you rejecting invalid inputs?: Yes
+Any difficulties: Getting the outputs to match up provided a bit of re-work as I'm not used
+to including the re-prompt at the end of the error message.
 ********************************************************/
 #include <iostream>
 #include <string> //for stoi()
