@@ -44,7 +44,7 @@ int main()
   minHeap<int> patientQueue(START); // array to store patient numbers
 
   showMenu();
-  while (choice != 3)
+  while (true)
     {
       choice = getNum();
       switch (choice) {
@@ -58,7 +58,7 @@ int main()
           break;
         case 3:
           printQueue(patientQueue);
-          break;
+          return 0;
         default:
           cout << "Invalid choice. The choice should be 1, 2, or 3. Enter a number: ";
       }
