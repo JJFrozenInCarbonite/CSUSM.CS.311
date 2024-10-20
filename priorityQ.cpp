@@ -167,7 +167,7 @@ void nextPatient(minHeap<int>& patientQueue) {
     cout << patientId << " is going to be treated now" << endl;
   }
   catch (const minHeap<int>::Underflow&) {
-    cout << "The queue has none" << endl;
+    cout << "There are no patients waiting" << endl;
   }
 }
 
