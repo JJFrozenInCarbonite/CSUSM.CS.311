@@ -6,7 +6,14 @@ Emergency room program - application of priority queue
 If you decide to use my getNum(), you need to compile your program as follows.
 g++ -std=c++11 priorityQ.cpp //stoi requires to be compiled with c++11
 
-Program description: ?????
+Program description: This program simulates an emergency room management system using a priority queue. 
+Patients are assigned a severity level upon check-in, with 1 being the most severe and 5 being the least severe. 
+The program allows for adding patients to the queue and calling the next patient based on their severity. It 
+uses a min-heap data structure to maintain the priority queue, ensuring that patients with higher severity are 
+attended to first. The program also includes error handling to manage invalid inputs and underflow conditions 
+when the queue is empty.
+
+If you need any additional details or modifications, please let me know!
 Your name: JJ Hoffmann
 Your programmer number: 16
 Hours spent making this application: 2
@@ -96,8 +103,7 @@ int getNum()
 
    do {
     bad = false;
-    cout << "Enter a number: ";
-    //cin >> choice;
+    cin >> choice;
 
     //convert a C++ string to an integer. stoi() is in string.h of c++ version 11
     try {
@@ -112,7 +118,17 @@ int getNum()
 
   return num;
 }
-
+/**
+ * @brief Adds a new patient to the queue.
+ * 
+ * This function prompts the user to enter the severity of the patient and adds the patient to the queue.
+ * The severity is an integer between 1 and 5, where 1 is the most severe and 5 is the least severe.
+ * The function generates a patient ID by concatenating the severity and the patient count and adds the patient
+ * to the queue.
+ * 
+ * @param patientCount The monotonically increasing integer to be used as part of the patient ID.
+ * @param patientQueue The minHeap to store the patient numbers.
+ */
 void addPatient(int& patientCount, minHeap<int>& patientQueue) {
   
   // patient severity
@@ -138,6 +154,14 @@ void addPatient(int& patientCount, minHeap<int>& patientQueue) {
   
 }
 
+/**
+ * @brief Treats the next patient in the queue.
+ * 
+ * This function treats the next patient in the queue by removing the patient with the smallest ID from the queue.
+ * If the queue is empty, the function prints a message indicating that the queue has no patients.
+ * 
+ * @param patientQueue The minHeap to store the patient numbers.
+ */
 void nextPatient(minHeap<int>& patientQueue) {
   try {
     int patientId = patientQueue.getMin();
@@ -148,6 +172,13 @@ void nextPatient(minHeap<int>& patientQueue) {
   }
 }
 
+/**
+ * @brief Prints the current queue of patients.
+ * 
+ * This function prints the current queue of patients to the console.
+ * 
+ * @param patientQueue The minHeap to store the patient numbers.
+ */
 void printQueue(const minHeap<int>& patientQueue) {
   cout << "The queue has " << patientQueue << endl;
 }
