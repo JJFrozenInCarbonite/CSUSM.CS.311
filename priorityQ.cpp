@@ -88,25 +88,29 @@ void showMenu()
  *
  * @return int The valid integer entered by the user.
  */
-int getNum() 
+int getNum()
 {
-  int num;  // user's choice
-  while (true) {
-      cin >> num;
+   string choice; //For example, when asking for 10, the user enters ab
+   bool bad;
+   int num;
 
-      // Check if the input is a number
-      if (cin.fail()) {
-        
-        // Clear the error state
-        cout << "Your choice has to be a number. Enter a number: ";
-        cin.clear();
-        cin.ignore(1000, '\n');
-      }
-      else {
-        // Return the validated input
-        return num;
-      }
-  }
+   do {
+    bad = false;
+    cout << "Enter a number: ";
+    //cin >> choice;
+
+    //convert a C++ string to an integer. stoi() is in string.h of c++ version 11
+    try {
+      num = stoi(choice); 
+    }
+    //stoi() throws an exception if it cannot convert the string to an integer. E.g. "ab" cannot be an integer.
+    catch(invalid_argument) {
+      cout << "Your choice has to be a number. ";
+      bad = true;
+    }
+  } while (bad == true);
+
+  return num;
 }
 
 void addPatient(int& patientCount, minHeap<int>& patientQueue) {
@@ -116,30 +120,12 @@ void addPatient(int& patientCount, minHeap<int>& patientQueue) {
 
   while(true) {
     cout << "Enter a severity, 1 most severe, .. 5 least severe: ";
-    cin >> severity;
-
-    if (cin.fail()) {
-      cout << "Your choice has to be a number. ";
-      cin.clear();
-      cin.ignore(1000, '\n');
-    }
-    else if (severity < 1 || severity > 5) {
-      cout << "Invalid choice. The choice should be 1, 2, 3, 4, or 5.";
-      cin.clear();
-      cin.ignore(1000, '\n');
-      break;
+    severity = getNum();
+    
+    if (severity >= 1 && severity <= 5) {
+     break;
     }
     else {
-      break;
-    }
-  }
-
-  // validate severity entered by user
-  while (severity < 1 || severity > 5) {
-    
-    // get severity from user
-    severity = getNum();
-    if (severity < 1 || severity > 5) {
       cout << "Invalid choice. The choice should be 1, 2, 3, 4, or 5.";
     }
   }
