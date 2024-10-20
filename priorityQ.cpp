@@ -113,8 +113,7 @@ int getNum()
     }
     //stoi() throws an exception if it cannot convert the string to an integer. E.g. "ab" cannot be an integer.
     catch(invalid_argument) {
-      cout << "Your choice has to be a number. " << endl;
-      cout << "Enter a number: ";
+      cout << "Your choice has to be a number. Enter a number: ";
       bad = true;
     }
   } while (bad == true);
