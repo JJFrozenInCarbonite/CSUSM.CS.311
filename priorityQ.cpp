@@ -50,10 +50,12 @@ int main()
       switch (choice) {
         case 1:
           addPatient(patientCount, patientQueue);
+          printQueue(patientQueue);
           showMenu();
           break;
         case 2:
           nextPatient(patientQueue);
+          printQueue(patientQueue);
           showMenu();
           break;
         case 3:
@@ -149,9 +151,6 @@ void addPatient(int& patientCount, minHeap<int>& patientQueue) {
   // create patient ID by concatenating severity and patient count and convert to int
   int patientId = stoi(to_string(severity) + to_string(patientCount++));
   patientQueue.insert(patientId);
-
-  printQueue(patientQueue);
-  
 }
 
 /**
