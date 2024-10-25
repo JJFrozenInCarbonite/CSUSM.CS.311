@@ -94,41 +94,29 @@ hashTbl::~hashTbl() {
 void hashTbl::put(entry* e) {
   // This function is like LL::addFront() from CS211
 
-  // string key = use ID for key 
-  string key = e->getID();
+    // Use ID as the key for hashing
+    string key = e->getID();
+    int index = hashNum(key) % size;
 
-  // int index = (call hashNum with key) % (table size); 
-  int index = hashNum(key) % size;
-
-  // Pointer to traverse the linked list
-  entry* cur = table[index];
-  
-  // If the list is empty, add the new entry directly
-  if (cur == nullptr) {
-    table[index] = e;
-    return;
-  }
-
-  // Traverse the list to check for duplicates and reach the end of the list
-  entry* prev = nullptr;
-  while (cur != nullptr) {
-
-    // If a duplicate is found, update the existing entry's data
-    if (cur->getID() == key) {
-      cur->name = e->name;
-      cur->age = e->age;
-      cur->GPA = e->GPA;
-
-      // Delete the new entry since it’s a duplicate
-      delete e;
-      return;
+    // Check if the key already exists in the list
+    entry* cur = table[index];
+    while (cur != nullptr) {
+        if (cur->getID() == key) {
+            // Update the existing entry's data
+            cur->name = e->name;
+            cur->age = e->age;
+            cur->GPA = e->GPA;
+            
+            // Delete the new entry since it’s a duplicate
+            delete e;
+            return;
+        }
+        cur = cur->next;
     }
-    prev = cur;
-    cur = cur->next;
-  }
 
-  // If no duplicate was found, add the new entry at the end of the list
-  prev->next = e;
+    // Insert the new entry at the front of the list
+    e->next = table[index];
+    table[index] = e;
 }
 
 //look up key and return the pointer to it. Assume keys are unique.
