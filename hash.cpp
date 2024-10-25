@@ -102,34 +102,33 @@ void hashTbl::put(entry* e) {
 
   // Pointer to traverse the linked list
   entry* cur = table[index];
-  entry* prev = nullptr;
+  
+  // If the list is empty, add the new entry directly
+  if (cur == nullptr) {
+    table[index] = e;
+    return;
+  }
 
-  // Traverse the list to check if the key already exists
+  // Traverse the list to check for duplicates and reach the end of the list
+  entry* prev = nullptr;
   while (cur != nullptr) {
 
-    // If an entry with the same ID already exists
+    // If a duplicate is found, update the existing entry's data
     if (cur->getID() == key) {
+      cur->name = e->name;
+      cur->age = e->age;
+      cur->GPA = e->GPA;
 
-        // Replace the existing entry
-        cur->name = e->name;
-        cur->age = e->age;
-        cur->GPA = e->GPA;
-        
-        // Delete the new entry since we are not adding it
-        delete e;
-        return;
+      // Delete the new entry since it’s a duplicate
+      delete e;
+      return;
     }
-
     prev = cur;
-    cur = cur->getNext();
+    cur = cur->next;
   }
 
-  // If the key does not exist, add the new entry to the front of the list
-  if (prev == nullptr) {
-      table[index] = e; // First entry in the list at this index
-  } else {
-      prev->next = e; // Add at the end of the list
-  }
+  // If no duplicate was found, add the new entry at the end of the list
+  prev->next = e;
 }
 
 //look up key and return the pointer to it. Assume keys are unique.
