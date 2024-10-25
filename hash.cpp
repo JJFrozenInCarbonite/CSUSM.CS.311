@@ -59,7 +59,7 @@ class hashTbl {
 
 //constructor
 //s is the size of the table
-hashTbl::hashTbl(int s) {
+hashTbl::hashTbl(int s) : size(s) {
 
   // Allocate a dynamic array with s slots
   table = new entry*[size];
@@ -86,6 +86,7 @@ hashTbl::~hashTbl() {
   }
   // Delete the dynamic array itself
   delete[] table;
+  table = nullptr;
 }
 
 //insert an entry to the table
@@ -99,22 +100,36 @@ void hashTbl::put(entry* e) {
   // int index = (call hashNum with key) % (table size); 
   int index = hashNum(key) % size;
 
-  // entry* cur = make cur point to the first entry
+  // Pointer to traverse the linked list
   entry* cur = table[index];
+  entry* prev = nullptr;
 
-  // add the entry at the beginning of the list coming out of index
-  if (cur == nullptr) {
-    table[index] = e;
-    return;
-  }
-  
-  // Traverse the list to the end
-  while (cur->getNext() != nullptr) {
+  // Traverse the list to check if the key already exists
+  while (cur != nullptr) {
+
+    // If an entry with the same ID already exists
+    if (cur->getID() == key) {
+
+        // Replace the existing entry
+        cur->name = e->name;
+        cur->age = e->age;
+        cur->GPA = e->GPA;
+        
+        // Delete the new entry since we are not adding it
+        delete e;
+        return;
+    }
+
+    prev = cur;
     cur = cur->getNext();
   }
 
-  // Add the new entry to the end of the list
-  cur->next = e;
+  // If the key does not exist, add the new entry to the front of the list
+  if (prev == nullptr) {
+      table[index] = e; // First entry in the list at this index
+  } else {
+      prev->next = e; // Add at the end of the list
+  }
 }
 
 //look up key and return the pointer to it. Assume keys are unique.
@@ -155,7 +170,7 @@ entry hashTbl::remove(const string& key) {
 
   // Check if the slot is empty
   if (cur == nullptr)
-    throw underflow(key);
+    throw underflow(key); // Throw exception if the list is empty
 
   // Traverse the linked list to find the entry with the matching key
   while (cur != nullptr) {
@@ -163,9 +178,9 @@ entry hashTbl::remove(const string& key) {
 
       // If the entry is the head of the list
       if (prev == nullptr) {
-        table[index] = cur->getNext();
+        table[index] = cur->getNext(); // Update the head of the list
       } else {
-        prev->next = cur->getNext();
+        prev->next = cur->getNext(); // Skip over the current entry
       }
 
       // Copy the entry to be removed
@@ -197,7 +212,7 @@ unsigned long hashNum(const string& key) {
 
   //checking each character until it reaches '\0'. When it reaches '\0', c gets the ascii number of '\0', which is 0. 0 means false -> getting out of while.
   while (c = *cstr++) {
-      hash = ((hash << 5) + hash) + c;//hash * 33 + c;
+      hash = ((hash << 5) + hash) + c;//;
   }
 
   return hash;
@@ -233,6 +248,8 @@ int main() {
     students.put(new entry(id, name, age, gpa));
     fin >> id >> name >> age >> gpa;
   }
+
+  fin.close(); // Close the input file stream
 
   //show the statistic about the table
   showTable(count, students);
