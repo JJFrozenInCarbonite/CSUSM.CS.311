@@ -255,9 +255,9 @@ int main() {
   showTable(count, students);
 
   //put entries into the table
-  //students.put(new entry("T1234567891", "Tom", 23, 4.0));
-  //students.put(new entry("F5432112345", "Fred", 45, 3.5));
-  //students.put(new entry("L1357915987", "Linsey", 48, 2.0));
+  students.put(new entry("T1234567891", "Tom", 23, 4.0));
+  students.put(new entry("F5432112345", "Fred", 45, 3.5));
+  students.put(new entry("L1357915987", "Linsey", 48, 2.0));
 
   //searches and returns students in table without removing                                                                     
   try {
