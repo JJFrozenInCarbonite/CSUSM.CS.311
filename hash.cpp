@@ -4,8 +4,8 @@ CS311
 
 Your name: JJ Hoffmann
 Your programmer number: 16
-Hours spent: ???
-Any difficulties?: ??????
+Hours spent: 2
+Any difficulties?: Ran into compiler issues where the more recent version on Windows does not provide the same result as the older version in RHEL 9.4. 
 *********************/
 #include <iostream>
 #include <fstream> 
