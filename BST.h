@@ -5,7 +5,10 @@ CS311
 Your name: JJ Hoffmann
 Your programmer number: 16
 Hours spent?: 2.5 hours
-Any difficulties?: ??????
+Any difficulties?: To answer the "WHY private?"" questions throughout the code, that is because we are leveraging encapsulation. Meaning 
+that any one else using our code will only have to use the public interface we've constructed and not directly interact/manipulate the 
+underlying data structures. This has the benefit of simplifying the code and making it easier to use, but also makes it more difficult to
+break the code by accident... or allow a bad actor to break the code on purpose.
 *****************/
 
 #ifndef BST_H
