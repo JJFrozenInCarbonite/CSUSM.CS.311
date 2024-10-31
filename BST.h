@@ -25,7 +25,7 @@ class BST;
 // Node class for the binary search tree (BST)
 template <class T>
 class Node {
-    friend class BST<T>;  / Grant BST access to private members of Node
+    friend class BST<T>;  // Grant BST access to private members of Node
 private:
     T el;               // Element stored in the node
     Node* right;        // Pointer to the right child
@@ -43,16 +43,16 @@ class BST
 private:
   Node<T>* root; // Root of the tree
 
-  void destroy(Node<T>* node);
-  void insertNodeR(Node<T>*& node, const T& e);
-  void inOrderPrint(Node<T>* node);
-  void preOrderPrint(Node<T>* node);
-  void postOrderPrint(Node<T>* node);
-  int getMaxLength(Node<T>* node);
-  int getMinLength(Node<T>* node);
-  int getNumNodes(Node<T>* node);
-  int getEvenNodes(Node<T>* node);
-  Node<T>* searchR(Node<T>* node, const T& e);
+  void destroy(Node<T>* p);
+  void insertNodeR(Node<T>*& p, const T& e);
+  void inOrderPrint(Node<T>* p);
+  void preOrderPrint(Node<T>* p);
+  void postOrderPrint(Node<T>* p);
+  int getMaxLength(Node<T>* p);
+  int getMinLength(Node<T>* p);
+  int getNumNodes(Node<T>* p);
+  int getEvenNodes(Node<T>* p);
+  Node<T>* searchR(Node<T>* p, const T& e);
 
  public:
   BST() { root = nullptr; }  //implement constructor here
@@ -67,7 +67,7 @@ private:
   int getNumNodes();
   int getEvenNodes();
   Node<T>* searchI(const T& e);
-  Node<T>* searchR(const T& e) { return searchR(root, e); }
+  Node<T>* searchR(const T& e);
   void BFTprint();
   void DFTprint();
 };
@@ -168,7 +168,7 @@ template <class T>
 void BST<T>::inOrderPrint(Node<T>* p) {
   if (p == nullptr) return; // Base case: empty tree
   inOrderPrint(p->left);    // Traverse left subtree
-  cout << p->el << " ";     // Print the element
+  cout << p->el << "-->";   // Print the element
   inOrderPrint(p->right);   // Traverse right subtree
 }
 
@@ -187,9 +187,9 @@ void BST<T>::preOrderPrint() {
 template <class T>
 void BST<T>::preOrderPrint(Node<T>* p) {
   if (p == nullptr) return; // Base case: empty tree
-  cout << p->el << " ";      // Print the element
-  preOrderPrint(p->left);    // Traverse left subtree
-  preOrderPrint(p->right);   // Traverse right subtree
+  cout << p->el << "-->";   // Print the element
+  preOrderPrint(p->left);   // Traverse left subtree
+  preOrderPrint(p->right);  // Traverse right subtree
 }
 
 /**
@@ -209,7 +209,7 @@ void BST<T>::postOrderPrint(Node<T>* p) {
   if (p == nullptr) return; // Base case: empty tree
   postOrderPrint(p->left);  // Traverse left subtree
   postOrderPrint(p->right); // Traverse right subtree
-  cout << p->el << " ";      // Print the element
+  cout << p->el << "-->";   // Print the element
 }
 
 /**
@@ -350,7 +350,7 @@ void BST<T>::BFTprint() {
     while (!q.empty()) {
         Node<T>* current = q.front(); // Get the front element
         q.pop(); // Remove the front element
-        std::cout << current->el << " "; // Print the current node's element
+        std::cout << current->el << "-->"; // Print the current node's element
         if (current->left != nullptr) q.push(current->left); // Push left child to the queue
         if (current->right != nullptr) q.push(current->right); // Push right child to the queue
     }
@@ -368,7 +368,7 @@ void BST<T>::DFTprint() {
     while (!stack.empty()) {
         Node<T>* current = stack.top(); // Get the top element
         stack.pop(); // Remove the top element
-        std::cout << current->el << " "; // Print the current node's element
+        std::cout << current->el << "-->"; // Print the current node's element
         if (current->right != nullptr) stack.push(current->right); // Push right child to the stack
         if (current->left != nullptr) stack.push(current->left); // Push left child to the stack
     }
