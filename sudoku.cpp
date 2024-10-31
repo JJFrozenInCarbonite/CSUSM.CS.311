@@ -5,11 +5,11 @@ CS311
 Sudoku - application of backtracking
 This program will show all the possible answers to a sudoku problem.
 
-Your name: ??????
-Your programmer number: ??????
+Your name: JJ Hoffmann
+Your programmer number: 16
 Hours spent: ??????
 Any difficulties?: ???????
-Complexity of this algorithm: O(?????) using SIZE and n (the total number of zeros)
+Complexity of this algorithm: O(SIZE^n) using SIZE and n (the total number of zeros)
 ***************************************************/
 #include <iostream>
 #include <cmath> //for sqrt()
@@ -75,44 +75,38 @@ bool valid(const int s[][SIZE], int y, int x, int num)
   return true;
 }
 
-/*
 //solve sudoku using a backtracking technique
 void solve(int s[][SIZE])
 {
+    //***************************************************************************************
+    //***************************************************************************************
+    //Make sure you state the complexity of this algorithm at the top where you put your name.
+    //***************************************************************************************
+    //***************************************************************************************
+    for(int row = 0; row < SIZE; row++) // for each row
+        for(int col = 0; col < SIZE; col++) // go through each column
+        {
+            if(s[row][col] == 0) // If the current slot is 0, look for a number that works
+            {
+                for(int num = 1; num <= SIZE; num++) // a number can be 1 through SIZE
+                {
+                    if(valid(s, row, col, num)) // call valid to see if the current number is possible
+                    {
+                        s[row][col] = num; // possible, then put the current number into the current slot.
+                        solve(s); // call solve() recursively
+                        s[row][col] = 0; // backtracked. it was a bad choice. Place 0 back in there. Try the next number.
+                    }
+                }
 
-//***************************************************************************************
-//***************************************************************************************
-//Make sure you state the complexity of this algorithm at the top where you put your name.
-//***************************************************************************************
-//***************************************************************************************
+                // tried out num = 1 through SIZE, but none worked
+                return; // there is no possible answer for the current slot. needs to backtrack (going back to the caller).
+            } // end of if 0
+        } // end of for(each column)
 
-  for(?????????????????????????)//for each row
-    for(?????????????????????????)//go through each column
-      {
-	if(??????????????)//If the current slot is 0, look for a number that works
-	  {
-	    for(??????????????????) //a number can be 1 through SIZE
-	      {
-		if(?????????????????) //call valid to see if the current number is possible
-		  {
-		    ?????????; //possible, then put the current number into the current slot.
-		    ?????????; //call solve() recursively
-		    s[??][??] = 0;//backtracked. it was a bad choice. Place 0 back in there. Try the next number.
-		  }
-	      }
-
-	    //tried out num = 1 through SIZE, but none worked
-	    return; //there is no possible answer for the current slot. needs to backtrack (going back to the caller). 
-	  }//end of if 0
-      }//end of for(each column)
-
-  printSudoku(s); //There are no more zeros. A solution was found. Print each possible answer.
-  char ch;	    
-  cin.get(ch); //read in <enter>
-
+    printSudoku(s); // There are no more zeros. A solution was found. Print each possible answer.
+    char ch;	    
+    cin.get(ch); // read in <enter>
 }
-*/
-
 
 void printSudoku(const int s[][SIZE])
 {
