@@ -7,8 +7,8 @@ This program will show all the possible answers to a sudoku problem.
 
 Your name: JJ Hoffmann
 Your programmer number: 16
-Hours spent: ??????
-Any difficulties?: ???????
+Hours spent: .75
+Any difficulties?: N/A
 Complexity of this algorithm: O(SIZE^n) using SIZE and n (the total number of zeros)
 ***************************************************/
 #include <iostream>
