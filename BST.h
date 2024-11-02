@@ -56,6 +56,7 @@ private:
   int getNumNodes(Node<T>* p);
   int getEvenNodes(Node<T>* p);
   Node<T>* searchR(Node<T>* p, const T& e);
+  void remove(Node<T>*& p);
 
  public:
   BST() { root = nullptr; }  //implement constructor here
@@ -71,6 +72,7 @@ private:
   int getEvenNodes();
   Node<T>* searchI(const T& e);
   Node<T>* searchR(const T& e);
+  bool remove(const T& e);
   void BFTprint();
   void DFTprint();
 };
@@ -339,6 +341,80 @@ template <class T>
 Node<T>* BST<T>::searchR(Node<T>* p, const T& e) {
     if (p == nullptr || p->el == e) return p; // Base case: empty tree or element found
     return (e < p->el) ? searchR(p->left, e) : searchR(p->right, e); // Recursively search
+}
+
+//This function returns true if e was removed or false if not because it doesn't exist.
+template <class T>
+bool BST<T>::remove(const T& e) //public function
+{
+    Node<T>* del = root; // del will point to the node to be deleted
+    Node<T>* parent = nullptr; // parent will point to the parent of the node to be deleted
+
+    // look for e in the tree
+    while (del != nullptr && del->el != e) // If root is NULL, del is NULL to start with. While won't be entered and return false down below.
+    {
+        parent = del; // parent follows del. In other words, del is ahead of parent.
+        if (e < del->el)
+            del = del->left; // move to the left child
+        else
+            del = del->right; // move to the right child
+    }
+
+    // e doesn't exist or tree is empty.
+    if (del == nullptr)
+        return false;
+
+    // check to see if root should be removed
+    if (del == root)
+        remove(root); // root will change. call the other remove function down below
+    // We are deleting a node other than the root node. Figure out if del's node is left or right child of parent's node
+    else if (parent->left == del) // parent's left child to be removed
+        remove(parent->left);
+    else // parent's right child to be removed
+        remove(parent->right);
+
+    // deleted the node with e
+    return true;
+}
+
+
+//p comes out of the parent node and points to the node to be deleted OR p points to root if root is the one to be deleted.
+//p will point to the grandchild (child node of the node to be deleted) if the node to be deleted has only one child or will point to NULL if p is root or the node to be deleted has no children. p will change. That is why we need to use &.                  
+template <class T>
+void BST<T>::remove(Node<T>*& p) //private function
+{
+    Node<T>* temp = p; // temp points to the node to be deleted initially
+    Node<T>* t_parent; // t_parent will point to the parent node of temp's node
+
+    // the node to be deleted has no right child
+    if (p->right == nullptr) {
+        p = p->left; // p now points to the root of the left subtree under del's node
+    }
+    // the node to be deleted has no left child
+    else if (p->left == nullptr) {
+        p = p->right; // p now points to the root of the right subtree under del's node
+    }
+    // If the node to be deleted has 2 children
+    else {
+        // we are going to replace e by the largest value in the left subtree
+        temp = p->left; // temp points to the root of the left subtree under the node to be deleted to start with
+        t_parent = p; // t_parent points to the node to be deleted to start with
+
+        // go to the largest value in the left subtree under the node to be deleted by going all the way down to right
+        while (temp->right != nullptr) {
+            t_parent = temp; // temp is ahead of t_parent
+            temp = temp->right; // temp will eventually point to the largest value
+        }
+        // copy the largest value into the node to be deleted
+        p->el = temp->el;
+
+        if (t_parent == p) // the largest value is the direct left child of the node whose value was replaced by the largest
+            t_parent->left = temp->left; // connect the left of the node whose value was replaced by the largest value to the left child of the node that has the largest value
+        else // the largest value is NOT the direct left child of the node whose value was replaced by the largest
+            t_parent->right = temp->left; // If the node with the largest value doesn't have any children, t_parent->right is set to NULL.
+    }
+    // finally delete temp;
+    delete temp;
 }
 
 /**
