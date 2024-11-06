@@ -181,7 +181,6 @@ void AVL<T>::insertNodeI(const T& e) {
  * @param p The starting node from which to update the balance factors.
  * @return The first unbalanced node encountered, or nullptr if the tree is balanced.
  */
-templa
 template <class T>
 Node<T>* AVL<T>::updateBF(Node<T>* p) {
     while (p != nullptr) {
