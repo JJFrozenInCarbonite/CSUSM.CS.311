@@ -187,7 +187,7 @@ Node<T>* AVL<T>::updateBF(Node<T>* p) {
         int leftHeight = (p->left != nullptr) ? getMaxLength(p->left) : 0;
         int rightHeight = (p->right != nullptr) ? getMaxLength(p->right) : 0;
 
-        p->bf = rightHeight - leftHeight;
+        p->bf = leftHeight - rightHeight;
 
         if (p->bf < -1 || p->bf > 1) {
             return p; // Return the unbalanced node
@@ -210,13 +210,13 @@ void AVL<T>::balanceTree(Node<T>* p) {
     while (p != nullptr) {
         updateBF(p); // Update the balance factor of the current node
 
-        if (p->bf == -2) { // Left heavy
-            if (p->left->bf == 1) {
+        if (p->bf == 2) { // Left heavy with new calculation
+            if (p->left->bf == -1) {
                 leftRotation(p->left); // Left-right case
             }
             rightRotation(p); // Left-left case
-        } else if (p->bf == 2) { // Right heavy
-            if (p->right->bf == -1) {
+        } else if (p->bf == -2) { // Right heavy with new calculation
+            if (p->right->bf == 1) {
                 rightRotation(p->right); // Right-left case
             }
             leftRotation(p); // Right-right case
@@ -563,7 +563,11 @@ void AVL<T>::BFTprint() {
     while (!q.empty()) {
         Node<T>* current = q.front(); // Get the front element
         q.pop(); // Remove the front element
-        std::cout << current->el << "-->"; // Print the current node's element
+
+        if (current->up == nullptr) 
+            std::cout << current->el << " " << current->bf << " -->"; 
+        else
+            std::cout << current->el << " " << current->bf << " " << current->up->el << "-->"; 
         if (current->left != nullptr) q.push(current->left); // Push left child to the queue
         if (current->right != nullptr) q.push(current->right); // Push right child to the queue
     }
