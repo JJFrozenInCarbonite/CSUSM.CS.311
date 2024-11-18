@@ -20,6 +20,8 @@ class edge {
  public:
   edge() { neighbor = -999, wt = -999;};
   edge(int u, int w) { neighbor = u; wt = w; };
+  int getNeighbor() const { return neighbor; }
+  int getWt() const { return wt; }
 };
 
 class graph {
@@ -34,6 +36,8 @@ class graph {
     void addEdge(int v, int u, int w = 1);  //If the weight is not given, 1 is used for wt.
     void BFT(int start);
     void DFT(int start);
+    int getNumVer() const;                  // Returns the number of vertices
+    std::list<edge*>* getVerAr() const;     // Returns the adjacency list
 };
 
 // Constructor: num is the number of vertices
@@ -234,5 +238,14 @@ void graph::BFT(int start) {
   // Clean up the dynamic array
   delete[] num;
 }
+
+int graph::getNumVer() const {
+    return num_ver;  // Returns the number of vertices
+}
+
+std::list<edge*>* graph::getVerAr() const {
+    return ver_ar;  // Returns the adjacency list
+}
+
 
 #endif

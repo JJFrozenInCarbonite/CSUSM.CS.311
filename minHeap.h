@@ -12,7 +12,11 @@ Any difficulties?: ????
 #define MINHEAP_H
 #include <iostream> //for operator<<()
 using namespace std;
-#include "swap.h" //for mySwap().  If you didn't create it, you can use the library's swap()
+//#include "swap.h" //for mySwap().  If you didn't create it, you can use the library's swap()
+
+// Forward declaration of mySwap
+template <typename T>
+void mySwap(T& a, T& b, int* locator, int indexA, int indexB);
 
 template <class T>
 class minHeap;
@@ -27,11 +31,12 @@ class minHeap
 private:
   T* ar; //dynamic array
   int capacity; //the size of ar
+  int* locator; // Tracks the index of each element in the heap
   int num; //the number of elements I have in ar
 public:
   minHeap(){ar = NULL; capacity = 0; num = 0;}
   minHeap(int c);
-  ~minHeap(){if(ar!=NULL)delete [] ar;}
+  ~minHeap();
   void min_heapify(int i);
   //void build_min_heap(); //no need to implement this. We won't use it for our application.
   void bubbleUp(int i);
@@ -39,6 +44,11 @@ public:
   int find(const T& key) const;
   void remove(int i);
   T getMin();
+  T& getElem(int i);                          // Access an element at index i
+  const T& getElem(int i) const;              // Const version to access an element
+  int getCap() const;                         // Get the capacity of the heap
+  int getNum() const;                         // Get the current number of elements
+  void updateElem(int i, const T& newValue);  // Update an element at index i
 
   class Underflow{};
   class Overflow{};
@@ -60,9 +70,55 @@ public:
 template <class T>
 minHeap<T>::minHeap(int c)
 {
-  capacity = c;
-  num = 0;
-  ar = new T[capacity];
+    ar = new T[capacity]; // Allocate memory for the heap
+    locator = new int[capacity]; // Allocate memory for the locator
+    for (int i = 0; i < capacity; ++i) {
+        locator[i] = i; // Initialize locator to identity mapping
+    }
+}
+
+/**
+ * @brief Destructs the minHeap object.
+ * 
+ * This destructor frees the memory allocated for the heap array when the minHeap object is destroyed.
+ * 
+ * @tparam T The type of elements stored in the heap.
+ */
+template <typename T>
+minHeap<T>::~minHeap() {
+    if (ar != nullptr) {
+        delete[] ar; // Free the dynamic array
+        ar = nullptr; // Avoid dangling pointer
+    }
+    if (locator != nullptr) {
+        delete[] locator; // Free the locator array
+        locator = nullptr; // Avoid dangling pointer
+    }
+}
+
+/**
+ * @brief Updates an element at a specified index in the min-heap.
+ * 
+ * This function updates the value of an element at a specified index in the heap.
+ * After updating the element, it ensures that the heap property is maintained 
+ * by either "bubbling up" or "heapifying down" the updated element.
+ * 
+ * @tparam T The type of elements stored in the heap.
+ * @param i The index of the element to be updated. Must be within the valid range [0, num-1].
+ * @param newValue The new value to assign to the element at index `i`.
+ * @throws Overflow If the index `i` is out of the valid range.
+ */
+template <typename T>
+void minHeap<T>::updateElem(int i, const T& newValue) {
+    if (i < 0 || i >= num) throw Overflow();
+    ar[i] = newValue;
+
+    // Check both upheap and downheap directions
+    if (i > 0 && ar[i] < ar[(i - 1) / 2]) {
+        bubbleUp(i);
+    } else {
+        min_heapify(i);
+    }
 }
 
 /**
@@ -79,8 +135,8 @@ minHeap<T>::minHeap(int c)
 template <class T>
 void minHeap<T>::min_heapify(int i)
 {
-  int left = 2*i + 1;
-  int right = 2*i + 2;
+  int left = 2 * i + 1;
+  int right = 2 * i + 2;
   int smallest = i;
 
   if(left < num && ar[left] < ar[i])
@@ -90,7 +146,7 @@ void minHeap<T>::min_heapify(int i)
 
   if(smallest != i)
   {
-    mySwap(ar[i], ar[smallest]);
+    mySwap(ar[i], ar[smallest], locator, i, smallest);
     min_heapify(smallest);
   }
 }
@@ -113,7 +169,7 @@ void minHeap<T>::bubbleUp(int i)
 
   if(i > 0 && ar[i] < ar[parent])
   {
-    mySwap(ar[i], ar[parent]);
+    mySwap(ar[i], ar[parent], locator, i, parent);;
     bubbleUp(parent);
   }
 }
@@ -221,7 +277,6 @@ T minHeap<T>::getMin()
  * @param o The output stream to write the heap elements to.
  * @param h The min-heap object to be printed.
  * @return ostream& The output stream containing the printed heap elements.
- * 
  */
 template <class T>
 ostream& operator<<(ostream& o, const minHeap<T>& h)
@@ -234,6 +289,72 @@ ostream& operator<<(ostream& o, const minHeap<T>& h)
       o << h.ar[i] << " ";
   }
   return o;
+}
+
+/**
+ * @brief Accesses an element at a specified index in the min-heap.
+ * 
+ * This function returns a reference to the element at the specified index in the min-heap.
+ * If the index is out of bounds, it throws an `Overflow` or `Underflow` exception.
+ * 
+ * @tparam T The type of elements stored in the heap.
+ * @param i The index of the element to be accessed.
+ * @return T& A reference to the element at the specified index.
+ * @throws Overflow if the index is greater than or equal to the capacity.
+ * @throws Underflow if the index is less than zero.
+ */
+template <typename T>
+T& minHeap<T>::getElem(int i) {
+  if (i < 0) throw Underflow();
+  if (i >= capacity) throw Overflow();
+  return ar[i];
+}
+
+/**
+ * @brief Accesses an element at a specified index in the min-heap.
+ * 
+ * This function returns a const reference to the element at the specified index in the min-heap.
+ * If the index is out of bounds, it throws an `Overflow` or `Underflow` exception.
+ * 
+ * @tparam T The type of elements stored in the heap.
+ * @param i The index of the element to be accessed.
+ * @return const T& A const reference to the element at the specified index.
+ * @throws Overflow if the index is greater than or equal to the capacity.
+ * @throws Underflow if the index is less than zero.
+ */
+template <typename T>
+const T& minHeap<T>::getElem(int i) const {
+    if (i < 0) throw Underflow();
+    if (i >= num) throw Overflow();
+    return ar[i]; // Ensure you're using `ar` correctly
+}
+
+
+/**
+ * @brief Returns the capacity of the min-heap.
+ * 
+ * This function returns the capacity of the min-heap, which is the maximum number of elements
+ * that can be stored in the heap.
+ * 
+ * @tparam T The type of elements stored in the heap.
+ * @return int The capacity of the heap.
+ */
+template <typename T>
+int minHeap<T>::getCap() const {
+    return capacity; // Total allocated size
+}
+
+/** 
+ * @brief Returns the number of elements in the min-heap.
+ * 
+ * This function returns the number of elements currently stored in the min-heap.
+ * 
+ * @tparam T The type of elements stored in the heap.
+ * @return int The number of elements in the heap.
+ */
+template <typename T>
+int minHeap<T>::getNum() const {
+    return num; // Current active elements
 }
 
 #endif

@@ -8,6 +8,7 @@ This clinet tests graph::BFT and DFT
 #include <fstream>
 using namespace std;
 #include "graph.h"
+#include "dijkstra.h"
 
 int main()                                                                                         
 {          
@@ -58,9 +59,9 @@ int main()
       g2.DFT(0);
 
       //You don't need to make Dijkstra's algo for homework on graph - part 1
-      /*cout << "\nDijkstra's algo: " << endl;
+      cout << "\nDijkstra's algo: " << endl;
       DijkstraShortestPath(g2, 3);
-      */
+      
     }
   fin.close();
   cout << endl;                                                                                                   

@@ -13,8 +13,9 @@ using distance by operator overloaded func.
 ******************************************************/
 #include <iostream>
 using namespace std;
-//???????? include your min heap class. It will be used in Dijkstra's algorithm
-//???????? include  your graph class. You will pass a graph to Dijkstra's algorithm
+#include "minHeap.h"  // include your min heap class. It will be used in Dijkstra's algorithm
+#include "graph.h"    // include  your graph class. You will pass a graph to Dijkstra's algorithm
+#include <stack>      //for stack
 
 //Each vertex has a vertex number, current shortest distance and predecessor
 struct vertex
@@ -35,33 +36,37 @@ int* locator; ///tells where each vertex exists within the heap. The dynamic arr
 bool operator<(const vertex& v1, const vertex& v2)
 {
   //compare the curDistances of v1 and v2
-  //??????????
+  return v1.curDist < v2.curDist;
 }
 
 //this will be called from the min heap class
 bool operator>(const vertex& v1, const vertex& v2)
 {
   //compare the curDistances of v1 and v2
-  //??????????
+  return v1.curDist > v2.curDist;
 }
 
 //If you are comparing 2 elements using >= or <= in your min heap class, you will need to make those operator overloaded functions as well.
 
 //this will be called from your min heap class.
-void mySwap(vertex& v1, vertex& v2)
-{
-  //swap 2 vertices
-  //????????  //Throughout this template, one line of ?s doesn't mean you can only have 1 statement. You can have multiple statmenets.
-  
-  //the locations of the 2 vertices need to be swapped as well.  locator is a global pointer declared above
-  //????????
+template <typename T>
+void mySwap(T& a, T& b, int* locator, int indexA, int indexB) {
+    // Swap the elements
+    T temp = a;
+    a = b;
+    b = temp;
+
+    // Update their positions in the locator array
+    int tempLoc = locator[indexA];
+    locator[indexA] = locator[indexB];
+    locator[indexB] = tempLoc;
 }
 
 //This will be called from printHeapArrays() down below. printHeapArrays() should be used for debugging your code. 
 ostream& operator<<(ostream& o, const vertex& v)
 {
   //output the 3 values of the vertex, v.  You could Output them in this format [vertexNum, curDist, predecessor]
-  //??????????????
+  o << "[" << v.vertexNum << ", " << v.curDist << ", " << v.predecessor << "]";
   return o;
 }
 
@@ -87,81 +92,89 @@ void printHeapArrays(const minHeap<vertex>& h, const int* locator, int num_ver)
 //  The distance is 8
 void showShortestDistance(const minHeap<vertex>& MH, int start)
 {
-  //******  COMPLETE this function  ******
-  /*
-  int dest; //destination			
+  int dest;
 
   cout << "Enter the destination: ";
   cin >> dest;
 
-  //trace the shortest path from dest back to start
-  //I suggest you use either library's stack or queue. Which one will work?
+  // Use a stack to trace back the shortest path
+  stack<int> path;
+  int current = dest;
 
+  while (current != -1) { // Trace back to the start
+      path.push(current);
+      current = MH.getElem(locator[current]).predecessor;
+  }
 
   cout << "The shortest path from " << start << " to " << dest << " is ";
+  while (!path.empty()) {
+      cout << path.top() << " ";
+      path.pop();
+  }
 
-
-  cout << "\nThe distance is " << ??????? << endl;
-  */
+  // Display the distance to the destination
+  cout << "\nThe distance is " << MH.getElem(locator[dest]).curDist << endl;
 }
 
 //Dijkstra's shortest path algorithm - generating a table that contains the shortest distance from start to every other vertex and the predecessor of each vertex.
 //g is a graph. We will pass the graph created in our client file.
 //start is the start vertex.
-void DijkstraShortestPath(const graph& g, int start)
-{
-  /*
-  minHeap<??????> ????????; //Create a min heap of the data type, vertex.
-  */
+void DijkstraShortestPath(const graph& g, int start) {
+  int numVer = g.getNumVer();
+  if (numVer == 0) {
+    cout << "Graph is empty." << endl;
+    return;
+  }
 
-  
-  /*
-  //The following for loop populates the min heap with all the vertices. Set curDist to 999 and predecessor to -1.
-  //e.g. vertex for vertext number 0 should like this [0, 999, -1]
-  //     vertex for vertext number 1 should like this [1, 999, -1]
-  vertex ver; //temp vertext struct used for multiple purposes 
-  for (int i = 0; i < ?????; i++)
-    {
-      //fill ver (declared above) with 3 values
-      //call minHeap::insert() to insert each vertex
-    }
-  */
+  // Create a minHeap of vertices
+  minHeap<vertex> MH(numVer);
 
-  
-  /*
-  ????????? //Create a dynamic array pointed to by locator, which is declared globally above.
-  //locator is an array containing the location of each vertex in the heap
-  //locator[0] always tells the location/index of vertex 0 in the heap. If the locator looks like [3, 0, 1, 2], vertex 0 is located at index 3 in the heap, veertex 1 is located at index 0 (meaning vertex 1 has the minimum distance).
-  */
-  
-  /*
-  ????????? //You need to initialize the locator array. To start with, locator array should look like this [0, 1, 2, 3, 4, ...] telling us vertex 0 is at index 0 in the heap, vertex 1 is at index 1
-  */
-  
- 
-  /*
-  //fill ver (declared above) with start, 0 and -1. start vertex should have 0 for curDist and -1 for predecessor
-  //If start is 3, ver should look like [3, 0, -1] 
-  ver.vertexNum = ?????
-  ver.curDist = ????
-  ver.predecessor = ????
-  //call minHeap::updateElem() to update the start vertex's info
-  ??????????
-  //the updateElem() will update the info at index i (first parameter). 
-  //updateElem() will fix the min heap based on curDist starting at i.
-  //Since this start vertex has 0 for curDist and the other vertices have 999 for curDist,
-  //this start vertex should come up to the top
-  */
+  // Populate the heap with all vertices
+  vertex ver;
+  for (int i = 0; i < numVer; i++) {
+    ver.vertexNum = i;
+    ver.curDist = 999; // Infinity
+    ver.predecessor = -1;
+    MH.insert(ver);
+  }
 
-  /*
-  //******** Follow Dijkstra's algorithm in the lecture notes and complete the following ***********
-  
-  //Use printHeapArrays() for debugging
-  
-  //After Dijkstra's algorithm is finished, call showShortestDistance() above to show the path and distance from start and destination
-  
-  //Don't forget to destroy the dynamic array you made for locator
-  */  
+  // Create and initialize the locator array
+  locator = new int[numVer];
+  for (int i = 0; i < numVer; i++) {
+    locator[i] = i;
+  }
+
+  // Update the start vertex to have a distance of 0
+  ver.vertexNum = start;
+  ver.curDist = 0;
+  ver.predecessor = -1;
+  MH.updateElem(locator[start], ver);
+
+  // Dijkstra's algorithm
+  while (MH.getNum() > 0) {
+    vertex current = MH.getMin();
+
+    // Access the neighbors of the current vertex
+    for (auto edge : *(g.getVerAr() + current.vertexNum)) {
+      int neighbor = edge->getNeighbor();
+      int weight = edge->getWt();
+
+      // Calculate new distance
+      int newDist = current.curDist + weight;
+
+      // Relaxation step
+      if (newDist < MH.getElem(locator[neighbor]).curDist) {
+        vertex updated = MH.getElem(locator[neighbor]);
+        updated.curDist = newDist;
+        updated.predecessor = current.vertexNum;
+        MH.updateElem(locator[neighbor], updated);
+      }
+      }
+
+  // Display the shortest path from the start to a user-specified destination
+  showShortestDistance(MH, start);
+
+  // Cleanup
+  delete[] locator;
+  locator = nullptr;
 }
-
-
