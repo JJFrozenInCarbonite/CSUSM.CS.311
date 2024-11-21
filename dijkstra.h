@@ -117,7 +117,7 @@ void showShortestDistance(const vector<vertex>& finalState, int start) {
     }
 
     // Display the path
-    cout << "The shortest path from " << start << " to " << dest << " is: ";
+    cout << "The shortest path from " << start << " to " << dest << " is ";
     while (!path.empty()) {
         cout << path.top() << " ";
         path.pop();
