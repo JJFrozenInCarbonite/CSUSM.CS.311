@@ -12,10 +12,10 @@ Min heap has a struct. In min heap class, maintain the property
 using distance by operator overloaded func.
 ******************************************************/
 #include <iostream>
+#include <stack>
+#include "minHeap.h"
+#include "graph.h"
 using namespace std;
-#include "minHeap.h"  // include your min heap class. It will be used in Dijkstra's algorithm
-#include "graph.h"    // include  your graph class. You will pass a graph to Dijkstra's algorithm
-#include <stack>      //for stack
 
 //Each vertex has a vertex number, current shortest distance and predecessor
 struct vertex
@@ -36,7 +36,7 @@ int* locator; ///tells where each vertex exists within the heap. The dynamic arr
 bool operator<(const vertex& v1, const vertex& v2)
 {
   //compare the curDistances of v1 and v2
-  return v1.curDist < v2.curDist;
+   return v1.curDist < v2.curDist;
 }
 
 //this will be called from the min heap class
@@ -49,17 +49,17 @@ bool operator>(const vertex& v1, const vertex& v2)
 //If you are comparing 2 elements using >= or <= in your min heap class, you will need to make those operator overloaded functions as well.
 
 //this will be called from your min heap class.
-template <typename T>
-void mySwap(T& a, T& b, int* locator, int indexA, int indexB) {
-    // Swap the elements
-    T temp = a;
-    a = b;
-    b = temp;
-
-    // Update their positions in the locator array
-    int tempLoc = locator[indexA];
-    locator[indexA] = locator[indexB];
-    locator[indexB] = tempLoc;
+void mySwap(vertex& v1, vertex& v2)
+{
+  //swap 2 vertices
+  vertex temp = v1; // Store v1 in a temporary variable
+  v1 = v2;          // Copy v2 into v1
+  v2 = temp;        // Copy the temporary value into v2
+  
+  // Swap their locations in the locator array
+  int tempLocator = locator[v1.vertexNum];
+  locator[v1.vertexNum] = locator[v2.vertexNum];
+  locator[v2.vertexNum] = tempLocator;
 }
 
 //This will be called from printHeapArrays() down below. printHeapArrays() should be used for debugging your code. 
@@ -90,91 +90,106 @@ void printHeapArrays(const minHeap<vertex>& h, const int* locator, int num_ver)
 //This function shows the shortest path from start to destination in the following format.
 //  The shortest path from 3 to 5 is 3 0 4 5
 //  The distance is 8
-void showShortestDistance(const minHeap<vertex>& MH, int start)
-{
-  int dest;
+void showShortestDistance(const vector<vertex>& finalState, int start) {
+    int dest;
 
-  cout << "Enter the destination: ";
-  cin >> dest;
+    cout << "Enter the destination: ";
+    cin >> dest;
 
-  // Use a stack to trace back the shortest path
-  stack<int> path;
-  int current = dest;
+    if (dest < 0 || dest >= finalState.size()) {
+        cout << "Error: Invalid destination vertex." << endl;
+        return;
+    }
 
-  while (current != -1) { // Trace back to the start
-      path.push(current);
-      current = MH.getElem(locator[current]).predecessor;
-  }
+    const vertex& destVertex = finalState[dest];
+    if (destVertex.curDist == 999) {
+        cout << "Error: Destination vertex is not reachable from start." << endl;
+        return;
+    }
 
-  cout << "The shortest path from " << start << " to " << dest << " is ";
-  while (!path.empty()) {
-      cout << path.top() << " ";
-      path.pop();
-  }
+    // Trace the path from the destination to the start
+    stack<int> path;
+    int current = dest;
 
-  // Display the distance to the destination
-  cout << "\nThe distance is " << MH.getElem(locator[dest]).curDist << endl;
+    while (current != -1) {
+        path.push(current);
+        current = finalState[current].predecessor;
+    }
+
+    // Display the path
+    cout << "The shortest path from " << start << " to " << dest << " is: ";
+    while (!path.empty()) {
+        cout << path.top() << " ";
+        path.pop();
+    }
+    cout << "\nThe distance is " << destVertex.curDist << endl;
 }
 
 //Dijkstra's shortest path algorithm - generating a table that contains the shortest distance from start to every other vertex and the predecessor of each vertex.
 //g is a graph. We will pass the graph created in our client file.
 //start is the start vertex.
 void DijkstraShortestPath(const graph& g, int start) {
-  int numVer = g.getNumVer();
-  if (numVer == 0) {
-    cout << "Graph is empty." << endl;
-    return;
-  }
+    int num_ver = g.getNumVer();
 
-  // Create a minHeap of vertices
-  minHeap<vertex> MH(numVer);
+    if (start < 0 || start >= num_ver) {
+        cerr << "Error: Invalid start vertex." << endl;
+        return;
+    }
 
-  // Populate the heap with all vertices
-  vertex ver;
-  for (int i = 0; i < numVer; i++) {
-    ver.vertexNum = i;
-    ver.curDist = 999; // Infinity
-    ver.predecessor = -1;
-    MH.insert(ver);
-  }
+    // Initialize the min-heap and locator array
+    minHeap<vertex> heap(num_ver);
+    vertex ver;
 
-  // Create and initialize the locator array
-  locator = new int[numVer];
-  for (int i = 0; i < numVer; i++) {
-    locator[i] = i;
-  }
+    locator = new int[num_ver];
+    vector<vertex> finalState(num_ver); // Store the final state of each vertex
 
-  // Update the start vertex to have a distance of 0
-  ver.vertexNum = start;
-  ver.curDist = 0;
-  ver.predecessor = -1;
-  MH.updateElem(locator[start], ver);
+    for (int i = 0; i < num_ver; ++i) {
+        ver.vertexNum = i;
+        ver.curDist = 999;
+        ver.predecessor = -1;
 
-  // Dijkstra's algorithm
-  while (MH.getNum() > 0) {
-    vertex current = MH.getMin();
+        heap.insert(ver);
+        locator[i] = i;
+    }
 
-    // Access the neighbors of the current vertex
-    for (auto edge : *(g.getVerAr() + current.vertexNum)) {
-      int neighbor = edge->getNeighbor();
-      int weight = edge->getWt();
+    // Initialize the start vertex
+    ver.vertexNum = start;
+    ver.curDist = 0;
+    heap.updateElem(locator[start], ver);
 
-      // Calculate new distance
-      int newDist = current.curDist + weight;
+    // Main loop of Dijkstra's algorithm
+    while (!heap.isEmpty()) {
+        vertex u = heap.getMin(); // Extract the vertex with the smallest distance
 
-      // Relaxation step
-      if (newDist < MH.getElem(locator[neighbor]).curDist) {
-        vertex updated = MH.getElem(locator[neighbor]);
-        updated.curDist = newDist;
-        updated.predecessor = current.vertexNum;
-        MH.updateElem(locator[neighbor], updated);
-      }
-      }
+        // Save the vertex state
+        finalState[u.vertexNum] = u;
 
-  // Display the shortest path from the start to a user-specified destination
-  showShortestDistance(MH, start);
+        list<edge*> adjList = g.getVerAr()[u.vertexNum];
+        for (const auto& edgePtr : adjList) {
+            int v = edgePtr->getNeighbor();
+            int weight = edgePtr->getWt();
 
-  // Cleanup
-  delete[] locator;
-  locator = nullptr;
+            if (locator[v] != -1) { // Ensure the vertex is still in the heap
+                vertex v_vertex = heap.getElem(locator[v]);
+
+                // Relax the edge
+                if (u.curDist + weight < v_vertex.curDist) {
+                    v_vertex.curDist = u.curDist + weight;
+                    v_vertex.predecessor = u.vertexNum;
+
+                    heap.updateElem(locator[v], v_vertex);
+                }
+            }
+        }
+
+        // Mark vertex as processed
+        locator[u.vertexNum] = -1;
+    }
+
+    // Use the saved state to display the shortest distance
+    showShortestDistance(finalState, start);
+
+    // Clean up the locator array
+    delete[] locator;
+    locator = nullptr;
 }

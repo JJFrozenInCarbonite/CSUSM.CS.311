@@ -10,16 +10,16 @@ using namespace std;
 #include "graph.h"
 #include "dijkstra.h"
 
-int main()                                                                                         
-{          
+int main()
+{
   cout << "testing unweighted graph--------------------" << endl;
-                                                                                        
+
   graph g(9); //a to i
 
   ifstream fin;
   fin.open("graph.in");
   int v, u, w; //v --> u
-               //  w 
+               //  w
 
   if(!fin)
     cout << "graph.in doesn't exist" << endl;
@@ -27,16 +27,16 @@ int main()
     {
       fin >> v >> u;
       while(fin)
-	{
-	  g.addEdge(v,u);
-	  fin >> v >> u;
-	}
+        {
+          g.addEdge(v,u);
+          fin >> v >> u;
+        }
 
-      cout << "BFS: ";                                                                                 
-      g.BFT(0);                                                                                     
-      cout << "\nDFS: ";                                                                 
-      g.DFT(0); 
-    }                                                                                    
+      cout << "BFS: ";
+      g.BFT(0);
+      cout << "\nDFS: ";
+      g.DFT(0);
+    }
   fin.close();
 
   cout << "\ntesting weighted graph--------------------" << endl;
@@ -61,9 +61,8 @@ int main()
       //You don't need to make Dijkstra's algo for homework on graph - part 1
       cout << "\nDijkstra's algo: " << endl;
       DijkstraShortestPath(g2, 3);
-      
     }
   fin.close();
-  cout << endl;                                                                                                   
-  return 0;                                                                                        
-}                                 
+  cout << endl;
+  return 0;
+}
