@@ -1,195 +1,111 @@
-/*****************************************************
-Kazumi Slott
-CS311
-Homework on Dijkstra's algorithm
+#ifndef DIJKSTRA_H
+#define DIJKSTRA_H
 
-4-19-2024
-
-This file contains code used for Dijkstra's algorithm.
-This implementation is least invasive to the graph and min heap classes.
-
-Min heap has a struct. In min heap class, maintain the property
-using distance by operator overloaded func.
-******************************************************/
-#include <iostream>
-#include <stack>
 #include "minHeap.h"
 #include "graph.h"
-using namespace std;
 
-//Each vertex has a vertex number, current shortest distance and predecessor
-struct vertex
-{
-  int vertexNum; //the vertex number
-  int curDist; //the current shortest distance from start to the vertex 
-  int predecessor; //the predecessor along the shortest path to the vertex
+struct Vertex {
+    int vertexIndex;        // The index of the vertex in the graph
+    int currentDistance;    // The current shortest distance from start to the vertex
+    int previousVertexIndex; // The predecessor along the shortest path to the vertex
+
+    bool operator<(const Vertex& other) const {
+        return currentDistance < other.currentDistance;
+    }
+
+    bool operator>(const Vertex& other) const {
+        return currentDistance > other.currentDistance;
+    }
 };
 
-int* locator; ///tells where each vertex exists within the heap. The dynamic array pointed to by this pointer will be created inside dijkstraSHortestPath() down below
-//e.g. vertex numbers in heap[3, 1, 2, 4, 0] vertex 3 is at the root because its curDist is the smallest
-//     locator should look like this [4, 1, 2, 0, 3] vertex 3 can be found at 0. vertex 0 can be found at 4 in heap
-//This is a global variable (sounds terrible), but that is ok for this application. The reason why it is declared global is that it is accessed from mySwap() down below. mySwap() is called from the min heap class. We are not passing locator to the min heap class.
+/**********************************************************************************
+What does the function do? Swaps two elements and their locations in the locator array
+What does it return? N/A
 
+Parameter 1: First element to swap
+Parameter 2: Second element to swap
+Parameter 3: Locator array
+**********************************************************************************/
+template <typename T>
+void swap(T& v1, T& v2, int* locatorArray) {
+    T temp = v1;    // Store v1 in a temporary variable
+    v1 = v2;        // Copy v2 into v1
+    v2 = temp;      // Copy the temporary value into v2
 
-//this will be called from the min heap class. Each element in the heap is a vertex which consists of vertexNum, curDist and predecessor.
-//The heap is maintained by curDist. 
-bool operator<(const vertex& v1, const vertex& v2)
-{
-  //compare the curDistances of v1 and v2
-   return v1.curDist < v2.curDist;
+    // Swap their locations in the locator array
+    int tempLocator = locatorArray[v1.vertexIndex];             // Store the locator of v1 in a temporary variable
+    locatorArray[v1.vertexIndex] = locatorArray[v2.vertexIndex];// Copy the locator of v2 into the locator of v1
+    locatorArray[v2.vertexIndex] = tempLocator;                 // Copy the temporary locator into the locator of v2
 }
 
-//this will be called from the min heap class
-bool operator>(const vertex& v1, const vertex& v2)
-{
-  //compare the curDistances of v1 and v2
-  return v1.curDist > v2.curDist;
-}
+class Dijkstra {
+public:
 
-//If you are comparing 2 elements using >= or <= in your min heap class, you will need to make those operator overloaded functions as well.
+    /**********************************************************************************
+    What does the function do? Dijkstra's algorithm to find the shortest path from a start 
+    node to all other nodes in the graph.
+    What does it return? N/A
 
-//this will be called from your min heap class.
-void mySwap(vertex& v1, vertex& v2)
-{
-  //swap 2 vertices
-  vertex temp = v1; // Store v1 in a temporary variable
-  v1 = v2;          // Copy v2 into v1
-  v2 = temp;        // Copy the temporary value into v2
-  
-  // Swap their locations in the locator array
-  int tempLocator = locator[v1.vertexNum];
-  locator[v1.vertexNum] = locator[v2.vertexNum];
-  locator[v2.vertexNum] = tempLocator;
-}
+    Parameter 1: Graph object
+    Parameter 2: Start node index
+    Parameter 3: Array to store the distances
+    Parameter 4: Array to store the previous nodes
+    **********************************************************************************/
+    static void shortestPath(const Graph& graph, int start, int* distances, int* previous) {
+        const int nodeCount = graph.getNodeCount(); // Get the number of nodes in the graph
 
-//This will be called from printHeapArrays() down below. printHeapArrays() should be used for debugging your code. 
-ostream& operator<<(ostream& o, const vertex& v)
-{
-  //output the 3 values of the vertex, v.  You could Output them in this format [vertexNum, curDist, predecessor]
-  o << "[" << v.vertexNum << ", " << v.curDist << ", " << v.predecessor << "]";
-  return o;
-}
+        int* locatorArray = new int[nodeCount]; // Locator array for the heap
+        bool* visited = new bool[nodeCount](); // Visited array to keep track of visited nodes
+        MinHeap<Vertex> heap(nodeCount);  // Min-heap to store vertices
 
-//print the min heap and locator array for debugging
-//num_ver is the total number of vertces.
-void printHeapArrays(const minHeap<vertex>& h, const int* locator, int num_ver)
-{
-  //This functions is complete. 
-  cout << "----- heap ------" << endl;
-  cout << h << endl; //operator<<() in min heap class is called here, which calls operator<<(ostream, vertex) above
+        // Initialize distances and heap
+        for (int i = 0; i < nodeCount; ++i) {
+            distances[i] = 999; // Infinity
+            previous[i] = -1; // No predecessor
+            locatorArray[i] = -1; // Not in heap
+        }
+        distances[start] = 0; // Start vertex has a distance of 0
+        heap.insert(Vertex{start, 0, -1}, locatorArray); // Insert the start vertex into the heap
 
-  cout << "----- locator ------" << endl;
-  for(int i = 0; i < num_ver; i++)                                                                                          
-    cout << locator[i] << " ";                                                                                               
-  cout << endl;
-}
+        // Dijkstra's algorithm
+        while (!heap.isEmpty()) {
+            Vertex current = heap.extractMin(locatorArray); // Extract the vertex with the smallest distance
 
-//This function will show the path from stat to destination
-//MH is the min heap which contains the vertexNum, curDist and precessor of all the vertices created by Dijkstra's algorithm
-//start is the start vertex. Dijkstra's algorithm calculated the shortest distance from start to every other vertex
-//This function shows the shortest path from start to destination in the following format.
-//  The shortest path from 3 to 5 is 3 0 4 5
-//  The distance is 8
-void showShortestDistance(const vector<vertex>& finalState, int start) {
-    int dest;
+            if (visited[current.vertexIndex]) continue; // Skip already-visited nodes
+            visited[current.vertexIndex] = true; // Mark the current node as visited
 
-    cout << "Enter the destination: ";
-    cin >> dest;
+            // Update distances for neighbors
+            for (const Edge& edge : graph.getAdjacencyList()[current.vertexIndex]) {
+                int neighborIndex = edge.destination; // Get the neighbor index
+                int weight = edge.weight; // Get the edge weight
+               
+                if (visited[neighborIndex]) continue; // Skip nodes that have already been visited
 
-    if (dest < 0 || dest >= finalState.size()) {
-        cout << "Error: Invalid destination vertex." << endl;
-        return;
-    }
+                int newDistance = current.currentDistance + weight; // Calculate the new distance
 
-    const vertex& destVertex = finalState[dest];
-    if (destVertex.curDist == 999) {
-        cout << "Error: Destination vertex is not reachable from start." << endl;
-        return;
-    }
+                // Update the distance if the new distance is shorter
+                if (newDistance < distances[neighborIndex]) {
+                    distances[neighborIndex] = newDistance; // Update the distance
+                    previous[neighborIndex] = current.vertexIndex; // Update the predecessor
 
-    // Trace the path from the destination to the start
-    stack<int> path;
-    int current = dest;
+                    // Insert or update the neighbor in the heap
+                    if (locatorArray[neighborIndex] == -1) {
 
-    while (current != -1) {
-        path.push(current);
-        current = finalState[current].predecessor;
-    }
+                        // Insert the neighbor into the heap
+                        heap.insert(Vertex{neighborIndex, newDistance, current.vertexIndex}, locatorArray);
+                    } else {
 
-    // Display the path
-    cout << "The shortest path from " << start << " to " << dest << " is ";
-    while (!path.empty()) {
-        cout << path.top() << " ";
-        path.pop();
-    }
-    cout << "\nThe distance is " << destVertex.curDist << endl;
-}
-
-//Dijkstra's shortest path algorithm - generating a table that contains the shortest distance from start to every other vertex and the predecessor of each vertex.
-//g is a graph. We will pass the graph created in our client file.
-//start is the start vertex.
-void DijkstraShortestPath(const graph& g, int start) {
-    int num_ver = g.getNumVer();
-
-    if (start < 0 || start >= num_ver) {
-        cerr << "Error: Invalid start vertex." << endl;
-        return;
-    }
-
-    // Initialize the min-heap and locator array
-    minHeap<vertex> heap(num_ver);
-    vertex ver;
-
-    locator = new int[num_ver];
-    vector<vertex> finalState(num_ver); // Store the final state of each vertex
-
-    for (int i = 0; i < num_ver; ++i) {
-        ver.vertexNum = i;
-        ver.curDist = 999;
-        ver.predecessor = -1;
-
-        heap.insert(ver);
-        locator[i] = i;
-    }
-
-    // Initialize the start vertex
-    ver.vertexNum = start;
-    ver.curDist = 0;
-    heap.updateElem(locator[start], ver);
-
-    // Main loop of Dijkstra's algorithm
-    while (!heap.isEmpty()) {
-        vertex u = heap.getMin(); // Extract the vertex with the smallest distance
-
-        // Save the vertex state
-        finalState[u.vertexNum] = u;
-
-        list<edge*> adjList = g.getVerAr()[u.vertexNum];
-        for (const auto& edgePtr : adjList) {
-            int v = edgePtr->getNeighbor();
-            int weight = edgePtr->getWt();
-
-            if (locator[v] != -1) { // Ensure the vertex is still in the heap
-                vertex v_vertex = heap.getElem(locator[v]);
-
-                // Relax the edge
-                if (u.curDist + weight < v_vertex.curDist) {
-                    v_vertex.curDist = u.curDist + weight;
-                    v_vertex.predecessor = u.vertexNum;
-
-                    heap.updateElem(locator[v], v_vertex);
+                        // Update the neighbor in the heap
+                        heap.heapifyUp(locatorArray[neighborIndex], locatorArray);
+                    }
                 }
             }
         }
 
-        // Mark vertex as processed
-        locator[u.vertexNum] = -1;
+        // Clean up
+        delete[] locatorArray;
+        delete[] visited;
     }
+};
 
-    // Use the saved state to display the shortest distance
-    showShortestDistance(finalState, start);
-
-    // Clean up the locator array
-    delete[] locator;
-    locator = nullptr;
-}
+#endif // DIJKSTRA_H
