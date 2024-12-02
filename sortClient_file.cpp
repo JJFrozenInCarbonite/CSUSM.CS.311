@@ -11,6 +11,7 @@ array with a different number of elements.
 #include <cstdlib> //for exit()
 using namespace std;
 #include "sort.h"
+#include "heapSort2.h"
 #include "/cs/slott/cs211/checkInput.h" //for getData()
 
 void runSort(char sort, int ar[])
@@ -67,6 +68,12 @@ void runSort(char sort, int ar[])
                mergeSort(ar, 0, s - 1);
                end = clock();
                break;
+
+    case 'H':  cout << " heap sort ";
+               start = clock();
+               heapSort(ar, s);
+               end = clock();
+               break;
     }
 
   cout << " with " << s << " numbers" << endl;
@@ -88,11 +95,12 @@ int main()
       cout << "      Q for quick sort: " << endl;
       cout << "      M for merge sort: " << endl;
       cout << "      E for end the program: " << endl;
+      cout << "      H for heap sort: " << endl;
       cout << "Please enter your choice: ";
       cin >> choice; 
 
       choice = toupper(choice); //making a lowercase letter to upper case by calling the library's toupper()
-      if(choice == 'S' || choice == 'B' || choice == 'I' || choice == 'Q' || choice == 'M')
+      if(choice == 'S' || choice == 'B' || choice == 'I' || choice == 'Q' || choice == 'M' || choice == 'H')
 	runSort(choice, ar);     
       else if(choice != 'E')
 	cout << "!!!!!!!!!!!!!!!!!!!! " << choice << " is INVALID !!!!!!!!!!!!!!!!!!" << endl;
