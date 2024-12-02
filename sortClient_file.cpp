@@ -7,7 +7,7 @@ array with a different number of elements.
 *********************************************************************************/
 #include <iostream>
 #include <fstream>
-//#include <???????> //for clock()
+#include <ctime> // for clock()
 #include <cstdlib> //for exit()
 using namespace std;
 #include "sort.h"
@@ -15,7 +15,7 @@ using namespace std;
 
 void runSort(char sort, int ar[])
 {
-  //????? start, end;
+  clock_t start, end;
   ifstream fin;
 
   cout << "How many numbers do you want to put into the array?: ";
@@ -39,38 +39,38 @@ void runSort(char sort, int ar[])
     {
     case 'S':  
     case 's':  cout << " selection sort ";
-               //start = ???????;
-               //selectionSort(????);
-	       //end = ?????;
-	       break;
+               start = clock();
+               selectionSort(ar, s);
+               end = clock();
+               break;
     case 'B':  
     case 'b':  cout << " bubble sort ";
-               //start = ?????;
-               //bubbleSort(????);
-	       //end = ?????;
-	       break;
+               start = clock();
+               bubbleSort(ar, s);
+               end = clock();
+               break;
     case 'I':  
     case 'i':  cout << " insertion sort ";
-               //start = ?????;
-               //insertionSort(????);
-	       //end = ?????;
-	       break;
+               start = clock();
+               insertionSort(ar, s);
+               end = clock();
+               break;
     case 'Q':  
     case 'q':  cout << " quick sort ";
-               //start = ?????;
-               //quickSort(????????);
-	       //end = ?????;
-	       break;
+               start = clock();
+               quickSort(ar, 0, s - 1);
+               end = clock();
+               break;
     case 'M':  
     case 'm':  cout << " merge sort ";
-               //start = ?????;
-               //mergeSort(???????);
-	       //end = ??????;
-	       break;
+               start = clock();
+               mergeSort(ar, 0, s - 1);
+               end = clock();
+               break;
     }
 
   cout << " with " << s << " numbers" << endl;
-  //cout << "Elapsed time: " << (??????) / double(??????) * ????? << " milliseconds" << endl;
+  cout << "Elapsed time: " << (end - start) / double(CLOCKS_PER_SEC) * 1000 << " milliseconds" << endl;
 }  
 
 int main()
