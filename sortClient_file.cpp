@@ -44,7 +44,7 @@ void runSort(char sort, int ar[])
     {
     case 'S':  
     case 's':  cout << " selection sort ";
-              for (int i = 0; i < times.size(); i++) {
+              for (int i = 0; i < times.size(), i++) {
                 cout << "Test: " << (i + 1) << endl;
                 start = clock();
                 selectionSort(ar, s);
@@ -56,33 +56,63 @@ void runSort(char sort, int ar[])
               break;
     case 'B':  
     case 'b':  cout << " bubble sort ";
-               start = clock();
-               bubbleSort(ar, s);
-               end = clock();
-               break;
+              for (int i = 0; i < times.size(), i++) {
+              cout << "Test: " << (i + 1) << endl;
+                start = clock();
+                bubbleSort(ar, s);
+                end = clock();
+                double time = (end - start) / double(CLOCKS_PER_SEC) * 1000;
+                cout << "Elapsed time: " << time << " milliseconds" << endl;
+                times[i] = time;
+              }
+              break;
     case 'I':  
     case 'i':  cout << " insertion sort ";
-               start = clock();
-               insertionSort(ar, s);
-               end = clock();
+              for (int i = 0; i < times.size(), i++) {
+              cout << "Test: " << (i + 1) << endl;
+                start = clock();
+                insertionSort(ar, s);
+                end = clock();
+                double time = (end - start) / double(CLOCKS_PER_SEC) * 1000;
+                cout << "Elapsed time: " << time << " milliseconds" << endl;
+                times[i] = time;
+              }
                break;
     case 'Q':  
     case 'q':  cout << " quick sort ";
-               start = clock();
-               quickSort(ar, 0, s - 1);
-               end = clock();
+              for (int i = 0; i < times.size(), i++) {
+              cout << "Test: " << (i + 1) << endl;
+                start = clock();
+                quickSort(ar, 0, s - 1);
+                end = clock();
+                double time = (end - start) / double(CLOCKS_PER_SEC) * 1000;
+                cout << "Elapsed time: " << time << " milliseconds" << endl;
+                times[i] = time;
+              }
                break;
     case 'M':  
     case 'm':  cout << " merge sort ";
-               start = clock();
-               mergeSort(ar, 0, s - 1);
-               end = clock();
+              for (int i = 0; i < times.size(), i++) {
+              cout << "Test: " << (i + 1) << endl;
+                start = clock();
+                mergeSort(ar, 0, s - 1);
+                end = clock();
+                double time = (end - start) / double(CLOCKS_PER_SEC) * 1000;
+                cout << "Elapsed time: " << time << " milliseconds" << endl;
+                times[i] = time;
+              }
                break;
 
     case 'H':  cout << " heap sort ";
-               start = clock();
-               heapSort(ar, s);
-               end = clock();
+              for (int i = 0; i < times.size(), i++) {
+              cout << "Test: " << (i + 1) << endl;
+                start = clock();
+                heapSort(ar, s);
+                end = clock();
+                double time = (end - start) / double(CLOCKS_PER_SEC) * 1000;
+                cout << "Elapsed time: " << time << " milliseconds" << endl;
+                times[i] = time;
+              }
                break;
     }
 
