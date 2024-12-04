@@ -7,6 +7,7 @@ This client tests quick sort and radix sort with the same string array.
 #include <iostream>
 #include <fstream>
 #include <ctime>
+#include <string>
 #include "/cs/slott/cs211/checkInput.h"
 #include "sort.h"
 #include "radix.h"
@@ -16,7 +17,7 @@ int main() {
   const int MAX = 250000; // Maximum array size allowed
   string ar[MAX];
   string arCopy[MAX]; // Copy of the array for radix sort
-
+  
 
   clock_t start, end;
   ifstream fin;
