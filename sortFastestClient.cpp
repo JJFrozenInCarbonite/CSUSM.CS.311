@@ -16,11 +16,6 @@ int main() {
   
   
   const int MAX = 250000; // Maximum array size allowed
-  
-  string ar[MAX];
-  
-  string arCopy[MAX]; // Copy of the array for radix sort
-  
 
   clock_t start, end;
   ifstream fin;
@@ -32,10 +27,15 @@ int main() {
     cout << "Please enter a number between 1 and 250000: ";
     cin >> s;
   }
+
+  int* ar = new int[s];
+  int* arCopy = new int[s];
   
   fin.open("/cs/slott/cs311/sort.in");
   if (!fin) {
     cout << "The input file doesn't open" << endl;
+    delete[] ar;
+    delete[] arCopy;
     return 0; // Program ends here
   }
 
@@ -57,7 +57,9 @@ int main() {
   // Test Radix Sort
   cout << "\n============ Testing Radix Sort";
   LL all;
-  makeLL(all, arCopy, s);
+  for (int i = 0; i < s; i++) {
+      all.addRear(arCopy[i]);
+  }
   start = clock();
   radixSort(all);
   end = clock();
