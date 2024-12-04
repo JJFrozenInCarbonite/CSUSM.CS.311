@@ -2,8 +2,8 @@
 #define RADIX_H
 
 #include <iostream>
-#include <fstream>
 #include <cstdlib>
+#include <string>
 
 using namespace std;
 
@@ -39,20 +39,16 @@ public:
   int size() const { return num; }
 
   class Underflow {}; // empty exception class
-
 };
 
-LL::~LL() {
-  Node* p = front;
-  while (!empty()) {
-    front = front->next;
-    delete p;
-    p = front;
-    if (front == NULL) rear = NULL;
-    num--;
-  }
-}
+// Function declarations
+void radixSort(LL& all);
+void printLL(const LL& l);
+void checkBuckets(const LL buckets[], int n);
+void combineLists(LL& all, LL buckets[]);
+void makeLL(LL& all, const string arr[], int size);
 
+// Function definitions
 void LL::addRear(const string& s) {
   Node* p = new Node(s);
   if (empty())
@@ -100,6 +96,17 @@ Node* LL::pop() {
     rear = NULL;
   }
   return temp;
+}
+
+LL::~LL() {
+  Node* p = front;
+  while (!empty()) {
+    front = front->next;
+    delete p;
+    p = front;
+    if (front == NULL) rear = NULL;
+    num--;
+  }
 }
 
 void radixSort(LL& all) {

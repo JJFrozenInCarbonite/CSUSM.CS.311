@@ -34,9 +34,10 @@ int main()
     }
 
   //fill the array                                                                                                                             
-  for(int i = 0; i < s; i++)
+  for(int i = 0; i < s; i++) {
     fin >> ar[i];
     arCopy[i] = ar[i];
+  }
   fin.close();
 
   // Test Quick Sort
