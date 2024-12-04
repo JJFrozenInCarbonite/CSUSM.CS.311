@@ -44,7 +44,7 @@ void runSort(char sort, int ar[])
     {
     case 'S':  
     case 's':  cout << " selection sort ";
-              for (int i = 0; i < times.size(), i++) {
+              for (int i = 0; i < times.size(); i++) {
                 cout << "Test: " << (i + 1) << endl;
                 start = clock();
                 selectionSort(ar, s);
