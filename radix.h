@@ -8,6 +8,36 @@ using namespace std;
 
 const int RADIX = 10; // Base 10 for decimal numbers
 
+// Node for linked list
+struct Node {
+    int data;
+    Node* next;
+    Node(int val) : data(val), next(nullptr) {}
+};
+
+// Function to add an element to the end of the linked list
+void append(Node*& head, Node*& tail, int value) {
+    Node* newNode = new Node(value);
+    if (!head) {
+        head = tail = newNode;
+    } else {
+        tail->next = newNode;
+        tail = newNode;
+    }
+}
+
+// Function to collect elements from a linked list back into the array
+void collect(Node*& head, int* arr, int& index) {
+    Node* current = head;
+    while (current) {
+        arr[index++] = current->data;
+        Node* temp = current;
+        current = current->next;
+        delete temp;
+    }
+    head = nullptr;
+}
+
 // Function to perform radix sort
 void radixSort(int* arr, int size) {
     if (size <= 0) return;
@@ -20,32 +50,26 @@ void radixSort(int* arr, int size) {
         maxNum /= RADIX;
     }
 
-    // Initialize buckets
-    int buckets[RADIX][size]; // Static 2D array for buckets
-    int bucketCounts[RADIX] = {0}; // To track the number of elements in each bucket
+    // Initialize buckets as linked lists
+    Node* buckets[RADIX] = {nullptr};
+    Node* bucketTails[RADIX] = {nullptr};
 
-    // Perform radix sort
     int powerOfRadix = 1; // RADIX^digit
     for (int digit = 0; digit < maxDigits; digit++) {
-        // Reset bucket counts
-        fill(bucketCounts, bucketCounts + RADIX, 0);
-
         // Distribute elements into buckets
         for (int i = 0; i < size; i++) {
             int digitValue = (arr[i] / powerOfRadix) % RADIX;
-            buckets[digitValue][bucketCounts[digitValue]++] = arr[i];
+            append(buckets[digitValue], bucketTails[digitValue], arr[i]);
         }
 
         // Collect elements from buckets back into the array
         int index = 0;
         for (int i = 0; i < RADIX; i++) {
-            for (int j = 0; j < bucketCounts[i]; j++) {
-                arr[index++] = buckets[i][j];
-            }
+            collect(buckets[i], arr, index);
+            bucketTails[i] = nullptr; // Reset tail pointers
         }
 
-        // Update power of radix for the next digit
-        powerOfRadix *= RADIX;
+        powerOfRadix *= RADIX; // Update power of radix for the next digit
     }
 }
 
