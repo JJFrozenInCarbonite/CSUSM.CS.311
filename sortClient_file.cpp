@@ -16,7 +16,7 @@ using namespace std;
 #include "heapSort2.h"
 #include "/cs/slott/cs211/checkInput.h" //for getData()
 
-vector<double> times(TN);
+
 
 void runSort(char sort, int ar[])
 {
@@ -44,7 +44,7 @@ void runSort(char sort, int ar[])
     {
     case 'S':  
     case 's':  cout << " selection sort ";
-              times.clear(TN);
+              vector<double> times(TN);
               for (int i = 0; i < times.size(); i++) {
                 cout << "Test: " << (i + 1) << endl;
                 start = clock();
@@ -57,7 +57,7 @@ void runSort(char sort, int ar[])
               break;
     case 'B':  
     case 'b':  cout << " bubble sort ";
-              times.clear(TN);
+              vector<double> times(TN);
               for (int i = 0; i < times.size(); i++) {
               cout << "Test: " << (i + 1) << endl;
                 start = clock();
@@ -70,7 +70,7 @@ void runSort(char sort, int ar[])
               break;
     case 'I':  
     case 'i':  cout << " insertion sort ";
-              times.clear(TN);
+              vector<double> times(TN);
               for (int i = 0; i < times.size(); i++) {
               cout << "Test: " << (i + 1) << endl;
                 start = clock();
@@ -83,7 +83,7 @@ void runSort(char sort, int ar[])
                break;
     case 'Q':  
     case 'q':  cout << " quick sort ";
-              times.clear(TN);
+              vector<double> times(TN);
               for (int i = 0; i < times.size(); i++) {
               cout << "Test: " << (i + 1) << endl;
                 start = clock();
@@ -96,7 +96,7 @@ void runSort(char sort, int ar[])
                break;
     case 'M':  
     case 'm':  cout << " merge sort ";
-              times.clear(TN);
+              vector<double> times(TN);
               for (int i = 0; i < times.size(); i++) {
               cout << "Test: " << (i + 1) << endl;
                 start = clock();
@@ -109,7 +109,7 @@ void runSort(char sort, int ar[])
                break;
 
     case 'H':  cout << " heap sort ";
-              times.clear(TN);
+              vector<double> times(TN);
               for (int i = 0; i < times.size(); i++) {
               cout << "Test: " << (i + 1) << endl;
                 start = clock();
