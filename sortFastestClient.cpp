@@ -18,7 +18,7 @@ int main() {
   const int MAX = 250000; // Maximum array size allowed
   
   string ar[MAX];
-  /*
+  
   string arCopy[MAX]; // Copy of the array for radix sort
   
 
