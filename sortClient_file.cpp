@@ -44,7 +44,7 @@ void runSort(char sort, int ar[])
     {
     case 'S':  
     case 's':  cout << " selection sort ";
-              for (int i = 0; i < times.size(), i++) {
+              for (int i = 0; i < times.size(); i++) {
                 cout << "Test: " << (i + 1) << endl;
                 start = clock();
                 selectionSort(ar, s);
@@ -56,7 +56,7 @@ void runSort(char sort, int ar[])
               break;
     case 'B':  
     case 'b':  cout << " bubble sort ";
-              for (int i = 0; i < times.size(), i++) {
+              for (int i = 0; i < times.size(); i++) {
               cout << "Test: " << (i + 1) << endl;
                 start = clock();
                 bubbleSort(ar, s);
@@ -68,7 +68,7 @@ void runSort(char sort, int ar[])
               break;
     case 'I':  
     case 'i':  cout << " insertion sort ";
-              for (int i = 0; i < times.size(), i++) {
+              for (int i = 0; i < times.size(); i++) {
               cout << "Test: " << (i + 1) << endl;
                 start = clock();
                 insertionSort(ar, s);
@@ -80,7 +80,7 @@ void runSort(char sort, int ar[])
                break;
     case 'Q':  
     case 'q':  cout << " quick sort ";
-              for (int i = 0; i < times.size(), i++) {
+              for (int i = 0; i < times.size(); i++) {
               cout << "Test: " << (i + 1) << endl;
                 start = clock();
                 quickSort(ar, 0, s - 1);
@@ -92,7 +92,7 @@ void runSort(char sort, int ar[])
                break;
     case 'M':  
     case 'm':  cout << " merge sort ";
-              for (int i = 0; i < times.size(), i++) {
+              for (int i = 0; i < times.size(); i++) {
               cout << "Test: " << (i + 1) << endl;
                 start = clock();
                 mergeSort(ar, 0, s - 1);
@@ -104,7 +104,7 @@ void runSort(char sort, int ar[])
                break;
 
     case 'H':  cout << " heap sort ";
-              for (int i = 0; i < times.size(), i++) {
+              for (int i = 0; i < times.size(); i++) {
               cout << "Test: " << (i + 1) << endl;
                 start = clock();
                 heapSort(ar, s);
