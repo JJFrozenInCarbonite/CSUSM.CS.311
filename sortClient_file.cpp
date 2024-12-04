@@ -5,14 +5,18 @@ Kazumi Slott
 This program tells how long it takes for each of your sorting algorithms to sort an 
 array with a different number of elements.
 *********************************************************************************/
+#define TN 400
 #include <iostream>
 #include <fstream>
 #include <ctime> // for clock()
 #include <cstdlib> //for exit()
+#include <vector>
 using namespace std;
 #include "sort.h"
 #include "heapSort2.h"
 #include "/cs/slott/cs211/checkInput.h" //for getData()
+
+vector<double> times(TN);
 
 void runSort(char sort, int ar[])
 {
@@ -40,10 +44,13 @@ void runSort(char sort, int ar[])
     {
     case 'S':  
     case 's':  cout << " selection sort ";
-               start = clock();
-               selectionSort(ar, s);
-               end = clock();
-               break;
+              for (int i = 0; i < times.size(), i++) {
+                start = clock();
+                selectionSort(ar, s);
+                end = clock();
+                times[i] = (end - start) / double(CLOCKS_PER_SEC) * 1000;
+              }
+              break;
     case 'B':  
     case 'b':  cout << " bubble sort ";
                start = clock();
@@ -77,7 +84,11 @@ void runSort(char sort, int ar[])
     }
 
   cout << " with " << s << " numbers" << endl;
-  cout << "Elapsed time: " << (end - start) / double(CLOCKS_PER_SEC) * 1000 << " milliseconds" << endl;
+  double average_time;
+  for(int i = 0; i < times.size(); i++)
+    average_time += times[i];
+  average_time /= (double)times.size();
+  cout << "Elapsed time: " << average_times << " milliseconds" << endl;
 }  
 
 int main()
