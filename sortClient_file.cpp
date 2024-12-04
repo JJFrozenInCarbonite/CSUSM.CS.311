@@ -91,7 +91,7 @@ void runSort(char sort, int ar[])
   for(int i = 0; i < times.size(); i++)
     average_time += times[i];
   average_time /= (double)times.size();
-  cout << "Elapsed time: " << average_times << " milliseconds" << endl;
+  cout << "Elapsed time: " << average_time << " milliseconds" << endl;
 }  
 
 int main()
