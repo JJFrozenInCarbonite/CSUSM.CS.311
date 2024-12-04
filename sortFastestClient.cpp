@@ -15,7 +15,7 @@ using namespace std;
 int main() {
   
   
-  const int MAX = 250000; // Maximum array size allowed
+  const int MAX = 1000000; // Maximum array size allowed
 
   clock_t start, end;
   ifstream fin;
@@ -23,7 +23,7 @@ int main() {
   cout << "How many numbers do you want to put into the array?: ";
   
   int s = -1;
-  while (s < 1 || s > 250000) {
+  while (s < 1 || s > 1000000) {
     cout << "Please enter a number between 1 and 250000: ";
     cin >> s;
   }
