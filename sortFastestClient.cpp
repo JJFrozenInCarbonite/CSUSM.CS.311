@@ -63,6 +63,5 @@ int main() {
   end = clock();
   cout << " with " << s << " numbers" << endl;
   cout << "Elapsed time: " << (end - start) / double(CLOCKS_PER_SEC) * 1000 << " milliseconds" << endl;
-  */
   return 0;
 }
