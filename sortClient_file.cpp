@@ -45,10 +45,13 @@ void runSort(char sort, int ar[])
     case 'S':  
     case 's':  cout << " selection sort ";
               for (int i = 0; i < times.size(), i++) {
+                cout << "Test: " << (i + 1) << endl;
                 start = clock();
                 selectionSort(ar, s);
                 end = clock();
-                times[i] = (end - start) / double(CLOCKS_PER_SEC) * 1000;
+                double time = (end - start) / double(CLOCKS_PER_SEC) * 1000;
+                cout << "Elapsed time: " << time << " milliseconds" << endl;
+                times[i] = time;
               }
               break;
     case 'B':  
