@@ -14,6 +14,7 @@ int main()
 {
   const int MAX = 250000; //the input file has 1000000 strings. The new operating system doesn't let us create a string array with 1 mil slots.                                                                                
   string ar[MAX];
+  string arCopy[MAX];
 
   clock_t start, end;
   ifstream fin;
@@ -34,11 +35,23 @@ int main()
   //fill the array                                                                                                                             
   for(int i = 0; i < s; i++)
     fin >> ar[i];
+    arCopy[i] = ar[i];
   fin.close();
 
-  cout << "\n============ Testing your fastest sort";
+  // Test Quick Sort
+  cout << "\n============ Testing Quick Sort";
   start = clock();
   quickSort(ar, 0, s - 1);
+  end = clock();
+  cout << " with " << s << " numbers" << endl;
+  cout << "Elapsed time: " << (end - start) / double(CLOCKS_PER_SEC) * 1000 << " milliseconds" << endl;
+
+  // Test Radix Sort
+  cout << "\n============ Testing Radix Sort";
+  LL all;
+  makeLL(all, arCopy, s);
+  start = clock();
+  radixSort(all);
   end = clock();
   cout << " with " << s << " numbers" << endl;
   cout << "Elapsed time: " << (end - start) / double(CLOCKS_PER_SEC) * 1000 << " milliseconds" << endl;
