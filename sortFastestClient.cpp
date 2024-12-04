@@ -38,7 +38,7 @@ int main()
 
   cout << "\n============ Testing your fastest sort";
   start = clock();
-  ????Sort(/*??????????*/);
+  quickSort(ar, 0, s - 1);
   end = clock();
   cout << " with " << s << " numbers" << endl;
   cout << "Elapsed time: " << (end - start) / double(CLOCKS_PER_SEC) * 1000 << " milliseconds" << endl;

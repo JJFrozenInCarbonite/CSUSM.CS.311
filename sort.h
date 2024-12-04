@@ -17,13 +17,14 @@ void swap(int& data1, int& data2)
   data1 = data2;
   data2 = temp;
 }
-
+/*
 void print(const int ar[], int n)
 {
   for(int i = 0; i < n; i++)
     cout << ar[i] << " ";
 }
 
+*/
 
 //https://www.youtube.com/watch?v=ROalU379l3U
 //Implement the insertion sort by watching the above youTube video. Your algorithm has to match their dance.
@@ -93,13 +94,13 @@ void bubbleSort(int ar[], int s)
   }//end of while                                                                                               
 }
 
-
-int partition(int arr[], int start, int end)
+template <typename T>
+int partition(T arr[], int start, int end)
 {
     int mid = (start + end) / 2;
     swap(arr[mid], arr[end]);  // Swap middle element with the last
 
-    int pivot = arr[end];      // Pivot is now the last element
+    T pivot = arr[end];        // Pivot is now the last element
     int red = start;           // Red starts at the beginning
 
     for (int green = start; green < end; green++) {
@@ -112,9 +113,10 @@ int partition(int arr[], int start, int end)
     return red;                // Return the index of the pivot
 }
 
-void quickSort(int arr[], int start, int end)
+template <typename T>
+void quickSort(T arr[], int start, int end)
 {
-    if (start >= end) 
+    if (start >= end)
         return;                // If the partition has 0 or 1 element, return
     else {
         int pivot = partition(arr, start, end);  // Partition and get pivot index
@@ -122,7 +124,6 @@ void quickSort(int arr[], int start, int end)
         quickSort(arr, pivot + 1, end);          // Sort right partition
     }  
 }
-
 
 void merge(int arr[], int first, int mid, int last)
 {

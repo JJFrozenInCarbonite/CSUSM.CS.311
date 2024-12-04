@@ -18,6 +18,7 @@ Any difficulties?: ?????
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
+#include <ctime> // Add this include for runtime observation
 using namespace std;
 
 const int LEN = 3; //the length of words
@@ -173,12 +174,20 @@ int main()
 {
   LL all; //holds all words
   makeLL(all); //all contains strings in the original order
+
+  clock_t start, end; // Variables for measuring runtime
   try
     {
+      start = clock(); // Start timer
       radixSort(all);//pop() could throw an exception
+      end = clock();   // End timer
+
       cout << "Final result ----" << endl;
       printLL(all); //all contains strings in sorted sorter
       cout << endl;
+
+      // Print runtime
+      cout << "Elapsed time: " << (end - start) / double(CLOCKS_PER_SEC) * 1000 << " milliseconds" << endl;
     }
   catch(LL::Underflow)
     {
@@ -230,7 +239,7 @@ void makeLL(LL& all)
 {
   string s;  
   fstream fin;
-  fin.open("radix.in");
+  fin.open("/cs/slott/cs311/sortString1mil.in");
   if(!fin)
     {
       cout << "The input file doesn't exist" << endl;
