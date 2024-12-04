@@ -33,7 +33,7 @@ int main() {
     cin >> s;
   }
   
-  fin.open("sortString1mil.in");
+  fin.open("/cs/slott/cs311/sort.in");
   if (!fin) {
     cout << "The input file doesn't open" << endl;
     return 0; // Program ends here
