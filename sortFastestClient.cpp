@@ -9,6 +9,7 @@ This client tests your fastest sort with a string array
 #include <time.h>
 #include "/cs/slott/cs211/checkInput.h"
 #include "sort.h"
+#include "radix.h"
 
 int main()
 {
