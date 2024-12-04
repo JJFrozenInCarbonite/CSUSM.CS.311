@@ -56,12 +56,8 @@ int main() {
 
   // Test Radix Sort
   cout << "\n============ Testing Radix Sort";
-  LL all;
-  for (int i = 0; i < s; i++) {
-      all.addRear(arCopy[i]);
-  }
   start = clock();
-  radixSort(all);
+  radixSort(ar, s);
   end = clock();
   cout << " with " << s << " numbers" << endl;
   cout << "Elapsed time: " << (end - start) / double(CLOCKS_PER_SEC) * 1000 << " milliseconds" << endl;
