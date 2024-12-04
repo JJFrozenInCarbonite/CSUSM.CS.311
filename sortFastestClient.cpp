@@ -4,7 +4,7 @@ CS311
 
 This client tests quick sort and radix sort with the same string array.
 **************************************************/
-
+#include <iostream>
 #include <fstream>
 #include <ctime>
 #include "/cs/slott/cs211/checkInput.h"
