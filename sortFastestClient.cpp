@@ -15,7 +15,7 @@ using namespace std;
 int main() {
   
   
-  const int MAX = 100000; // Maximum array size allowed
+  const int MAX = 250000; // Maximum array size allowed
   
   string ar[MAX];
   /*
