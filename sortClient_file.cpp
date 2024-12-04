@@ -6,7 +6,7 @@
 #include <algorithm> 
 #include "sort.h"
 #include "heapSort2.h"
-#include "/cs/slott/cs211/checkInput.h" //for getData()
+
 
 using namespace std;
 
@@ -57,14 +57,21 @@ void runHeapSort(int ar[], int original[], int size, int numTests) {
     measureExecutionTime(heapSort, ar, original, size, numTests);
 }
 
+void runRadixSort(int ar[], int original[], int size, int numTests) {
+    measureExecutionTime(heapSort, ar, original, size, numTests);
+}
+
 void runSort(char sort, int ar[], int original[]) {
     ifstream fin;
 
     cout << "How many numbers do you want to put into the array?: ";
-    int s = getData(1, 1000000, "Please enter a number between 1 and 1000000: ");
+    cout << "Please enter a number between 1 and 1000000: ";
+    int s;
+    cin >> s;
 
     cout << "How many times do you want to run the test?: ";
-    int numTests = getData(1, 1000, "Please enter a number between 1 and 1000: ");
+    "Please enter a number between 1 and 1000: ";
+    cin >> s;
 
     fin.open("/cs/slott/cs311/sort.in");
     if (!fin) {

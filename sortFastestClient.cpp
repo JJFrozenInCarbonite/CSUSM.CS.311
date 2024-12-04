@@ -8,14 +8,17 @@ This client tests quick sort and radix sort with the same string array.
 #include <fstream>
 #include <ctime>
 #include <string>
-#include "/cs/slott/cs211/checkInput.h"
 #include "sort.h"
 #include "radix.h"
 using namespace std;
 
 int main() {
-  const int MAX = 250000; // Maximum array size allowed
+  
+  
+  const int MAX = 100000; // Maximum array size allowed
+  
   string ar[MAX];
+  /*
   string arCopy[MAX]; // Copy of the array for radix sort
   
 
@@ -23,8 +26,13 @@ int main() {
   ifstream fin;
 
   cout << "How many numbers do you want to put into the array?: ";
-  int s = getData(1, 250000, "Please enter a number between 1 and 250000: ");
-
+  
+  int s = -1;
+  while (s < 1 || s > 250000) {
+    cout << "Please enter a number between 1 and 250000: ";
+    cin >> s;
+  }
+  
   fin.open("sortString1mil.in");
   if (!fin) {
     cout << "The input file doesn't open" << endl;
@@ -55,6 +63,6 @@ int main() {
   end = clock();
   cout << " with " << s << " numbers" << endl;
   cout << "Elapsed time: " << (end - start) / double(CLOCKS_PER_SEC) * 1000 << " milliseconds" << endl;
-
+  */
   return 0;
 }
