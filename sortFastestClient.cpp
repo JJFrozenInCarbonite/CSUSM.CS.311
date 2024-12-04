@@ -2,39 +2,34 @@
 Implemented by Kazumi Slott
 CS311
 
-This client tests your fastest sort with a string array
+This client tests quick sort and radix sort with the same string array.
 **************************************************/
 
 #include <fstream>
-#include <time.h>
+#include <ctime>
 #include "/cs/slott/cs211/checkInput.h"
 #include "sort.h"
 #include "radix.h"
 
-int main()
-{
-  const int MAX = 250000; //the input file has 1000000 strings. The new operating system doesn't let us create a string array with 1 mil slots.                                                                                
+int main() {
+  const int MAX = 250000; // Maximum array size allowed
   string ar[MAX];
-  string arCopy[MAX];
+  string arCopy[MAX]; // Copy of the array for radix sort
 
   clock_t start, end;
   ifstream fin;
 
   cout << "How many numbers do you want to put into the array?: ";
-  //the number of elements we can accept is 1 to 250,000. The input file has 1 million strings. You might want to open it to see.           \
-                                                                                                                                               
-  int s = getData(1, 250000, "Please enter a number between 1 and 250000: ");//getData() is in /cs/slott/cs211/checkInput.h                \
-                                                                                                                                               
+  int s = getData(1, 250000, "Please enter a number between 1 and 250000: ");
 
   fin.open("sortString1mil.in");
-  if(!fin)
-    {
-      cout << "The input file doesn't open" << endl;
-      return 0; //program ends here                                                                                                                  
-    }
+  if (!fin) {
+    cout << "The input file doesn't open" << endl;
+    return 0; // Program ends here
+  }
 
-  //fill the array                                                                                                                             
-  for(int i = 0; i < s; i++) {
+  // Fill the array and create a copy for radix sort
+  for (int i = 0; i < s; i++) {
     fin >> ar[i];
     arCopy[i] = ar[i];
   }
