@@ -100,7 +100,7 @@ void HashTable<T>::put(const std::string& key, const T& value) {
 
     // Insert the key-value pair, if not overwritten
 
-    table[index].push_back(entry{key, value});
+    table[index].push_back(entry<T>{key, value});
 
     // Increase the table size
     ++keyCount;
